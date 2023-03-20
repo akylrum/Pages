@@ -3908,6 +3908,14 @@ this._dy);const bounceAngle=collisionEngine.CalculateBounceAngle(this._inst,this
 }
 
 {
+'use strict';{const C3=self.C3;C3.Behaviors.jumpthru=class JumpthruBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}}}{const C3=self.C3;C3.Behaviors.jumpthru.Type=class JumpthruType extends C3.SDKBehaviorTypeBase{constructor(behaviorType){super(behaviorType)}Release(){super.Release()}OnCreate(){}}}
+{const C3=self.C3;const IBehaviorInstance=self.IBehaviorInstance;const ENABLE=0;C3.Behaviors.jumpthru.Instance=class JumpthruInstance extends C3.SDKBehaviorInstanceBase{constructor(behInst,properties){super(behInst);this.SetEnabled(true);if(properties)this.SetEnabled(properties[ENABLE])}Release(){super.Release()}SetEnabled(e){this._inst._SetJumpthruEnabled(!!e)}IsEnabled(){return this._inst._IsJumpthruEnabled()}SaveToJson(){return{"e":this.IsEnabled()}}LoadFromJson(o){this.SetEnabled(o["e"])}GetPropertyValueByIndex(index){switch(index){case ENABLE:return this.IsEnabled()}}SetPropertyValueByIndex(index,
+value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProperties(){return[{title:"$"+this.GetBehaviorType().GetName(),properties:[{name:"behaviors.jumpthru.properties.enabled.name",value:this.IsEnabled(),onedit:v=>this.SetEnabled(v)}]}]}GetScriptInterfaceClass(){return self.IJumpthruBehaviorInstance}};const map=new WeakMap;self.IJumpthruBehaviorInstance=class IJumpthruBehaviorInstance extends IBehaviorInstance{constructor(){super();map.set(this,IBehaviorInstance._GetInitInst().GetSdkInstance())}set isEnabled(e){map.get(this).SetEnabled(!!e)}get isEnabled(){return map.get(this).IsEnabled()}}}
+{const C3=self.C3;C3.Behaviors.jumpthru.Cnds={IsEnabled(){return this.IsEnabled()}}}{const C3=self.C3;C3.Behaviors.jumpthru.Acts={SetEnabled(e){this.SetEnabled(e)}}}{const C3=self.C3;C3.Behaviors.jumpthru.Exps={}};
+
+}
+
+{
 const C3 = self.C3;
 self.C3_GetObjectRefTable = function () {
 	return [
@@ -3917,13 +3925,14 @@ self.C3_GetObjectRefTable = function () {
 		C3.Behaviors.solid,
 		C3.Plugins.Keyboard,
 		C3.Behaviors.Bullet,
+		C3.Behaviors.jumpthru,
 		C3.Plugins.Keyboard.Cnds.OnKey,
 		C3.Plugins.Sprite.Acts.SetMirrored,
 		C3.Plugins.Sprite.Acts.Spawn,
-		C3.Behaviors.Bullet.Acts.SetAngleOfMotion,
 		C3.Plugins.System.Cnds.Every,
 		C3.Plugins.Sprite.Acts.Destroy,
-		C3.Plugins.Sprite.Cnds.OnCollision
+		C3.Plugins.Sprite.Cnds.OnCollision,
+		C3.Plugins.Sprite.Acts.SetAngle
 	];
 };
 self.C3_JsPropNameTable = [
@@ -3946,7 +3955,12 @@ self.C3_JsPropNameTable = [
 	{Спрайт12: 0},
 	{Спрайт13: 0},
 	{Спрайт14: 0},
-	{Спрайт15: 0}
+	{Спрайт15: 0},
+	{Спрайт16: 0},
+	{Спрайт17: 0},
+	{СквознаяПлатформа: 0},
+	{Спрайт18: 0},
+	{Спрайт19: 0}
 ];
 }
 
@@ -4048,9 +4062,10 @@ function or(l, r)
 
 self.C3_ExpressionFuncs = [
 		() => 0,
-		() => 60,
 		() => 1,
-		() => 3
+		() => 3,
+		() => 2,
+		() => 90
 ];
 
 
