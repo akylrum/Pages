@@ -1,15 +1,17 @@
 ---
 layout: page
-title: About
+title: MRLK
 permalink: /about/
 ---
 
-Some information about you!
+Hey, Im Andrey, gamedeveloper and animator. Sometimes I do art and music waaah.
 
-### More Information
 
-A place to include any other types of information that you'd like to include about yourself.
+### Biga Projects
+
+Last time I worked on [Call of Sentinels](https://store.steampowered.com/app/2558200/Call_of_Sentinels/) as a lead character animator.
+
 
 ### Contact me
 
-[email@domain.com](mailto:email@domain.com)
+![]({{}}/images/howtospine/wheretowrite.png)
