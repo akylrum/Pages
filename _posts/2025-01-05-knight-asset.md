@@ -3,7 +3,7 @@ layout: post
 title: "Armored Dog Character Asset"
 date: 2025-01-05
 categories: assets
-image: https://public-files.gumroad.com/krrctdfuxwf1suwpdjrx8axwud7m
+image: \images\assets\armoreddog\skins.png
 excerpt: "A set of knight character assets for your game projects."
 description: "Armored Yellow Dog in Spine 2D with 3 skins. Ready to use."
 tags: [character, game, asset, free]
@@ -18,7 +18,7 @@ It includes the following features:
 - Idle, run, walk, attack, super attack and block-attack animations
 - Available in Spine format
 
-![Knight Character](\images\assets\armoreddog\skins.png)
+![Knight Character](\images\assets\armoreddog\stab.gif)
 
 ### 💾 **Download:**
 
