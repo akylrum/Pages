@@ -94,3 +94,14 @@ exclude:
   - LICENSE
   - README.md
   - CNAME
+
+
+sass:
+  style: compressed
+
+plugins:
+  - jekyll-feed
+
+# CSS
+include:
+  - assets/css/custom.css
