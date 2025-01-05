@@ -18,7 +18,7 @@ body {
   /* --- Styling for the posts grid --- */
   .posts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
     max-width: 1200px;
     margin: 40px auto;
@@ -59,7 +59,7 @@ body {
   /* --- Styling for the header image --- */
   .header-image {
     width: 100%;
-    height: 300px;
+    
     object-fit: cover;
     border-bottom: 4px solid #0073e6;
     margin-bottom: 20px;
