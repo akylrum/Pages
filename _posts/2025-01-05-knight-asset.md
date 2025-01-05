@@ -2,7 +2,7 @@
 layout: post
 title: "Armored Dog Character Asset"
 date: 2025-01-05
-categories: assets
+category: assets
 image: \images\assets\armoreddog\skins.png
 excerpt: "A set of knight character assets for your game projects."
 description: "Armored Yellow Dog in Spine 2D with 3 skins. Ready to use."
