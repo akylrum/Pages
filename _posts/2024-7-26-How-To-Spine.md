@@ -3,7 +3,7 @@ layout: post
 title: How to spine for optimization
 image: \images\howtospine\exportsettings.png
 date: 2024-07-26
-category: tutorials
+category: tutorial
 excerpt: "A small tutorial with several advices for spine optimization for small games."
 tags: [tutorial, spine]
 ---

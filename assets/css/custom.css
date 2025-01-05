@@ -42,10 +42,10 @@ body {
   margin: 20px auto;
   background-color: #fff;
   text-decoration: none;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  transition: transform 0.3s ease;
+  transition: transform 0.1s ease;
 }
 
 .post-card:hover {
@@ -74,26 +74,27 @@ body {
 
 /* --- Tooltip for Post Category --- */
 .post-category {
-  position: absolute;
+  position: absolute;  /* Это необходимо для позиционирования относительно .post-card */
   top: 10px;
   left: 10px;
-  background-color: #f03e3e;
-  color: #fff;
+  background-color: #f03e3e; /* Цвет фона тултипа */
+  color: #fff; /* Цвет текста */
   padding: 4px 10px;
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: bold;
   border-radius: 4px;
   text-transform: uppercase;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 10;  /* Чтобы тултип был поверх других элементов */
+  z-index: 10; /* Чтобы тултип был поверх других элементов */
+  display: block; /* Тултип всегда отображается */
 }
 
 /* Разные категории могут иметь разные цвета */
-.post-category.assets {
+.post-category.asset {
   background-color: #f03e3e; /* Красный для ассетов */
 }
 
-.post-category.tutorials {
+.post-category.tutorial {
   background-color: #4dabf7; /* Голубой для туториалов */
 }
 
@@ -101,3 +102,18 @@ body {
   background-color: #51cf66; /* Зелёный для портфолио */
 }
 
+
+.post-category {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
