@@ -1,28 +1,28 @@
 ---
 layout: post
-title: "Knight Character Asset"
+title: "Armored Dog Character Asset"
 date: 2025-01-05
 categories: assets
-image: /assets/images/knight.png
-description: "A cute, game-ready knight character with animations."
+image: https://public-files.gumroad.com/krrctdfuxwf1suwpdjrx8axwud7m
+description: "Armored Yellow Dog in Spine 2D with 3 skins. Ready to use."
 tags: [character, game, asset, free]
 ---
 
 ## Knight Character Asset
 
-This is a **game-ready knight character asset** designed for casual games.  
+This is a **game-ready knight dog character asset** designed for casual games.  
 It includes the following features:
 
-- Fully animated knight character
-- Idle, run, attack, and jump animations
-- Available in PNG and Spine format
+- Fully animated character with 3 skins
+- Idle, run, walk, attack, super attack and block-attack animations
+- Available in Spine format
 
-![Knight Character](/assets/images/knight-full.png)
+![Knight Character](\images\assets\armoreddog\skins.png)
 
 ### 💾 **Download:**
 
-👉 [Download the knight character asset](https://your-download-link.com)  
-👉 [View the Spine animation demo](https://your-demo-link.com)
+👉 [Download the knight character asset](https://akylrum.gumroad.com/l/TcvpG)  
+
 
 ### 🖌️ **How to use:**
 
