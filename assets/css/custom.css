@@ -18,43 +18,51 @@ body {
   /* --- Styling for the posts grid --- */
   .posts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(500px, 20fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 20fr));
     gap: 20px;
     max-width: 1280px;
     margin: 40px auto;
     padding: 0 20px;
   }
   
-  .post-card {
-    background-color: #ffffff;
-    border-radius: 1px;
-    overflow: hidden;
-    box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
-    transition: transform 0s ease, box-shadow 0s ease;
-  }
-  
-  .post-card:hover {
-    transform: translateY(0px);
-    box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
-  }
-  
-  .post-card img {
-    width: 250;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .post-card h2 {
-    font-size: 24px;
-    margin: 16px;
-    color: #333;
-  }
-  
-  .post-card p {
-    font-size: 16px;
-    margin: 0 16px 16px;
-    color: #666;
-  }
+ /* Увеличиваем размеры изображений превью */
+.post-card img {
+  width: 100%; /* Для растягивания на всю ширину блока */
+  height: 200px; /* Высота прямоугольного изображения */
+  object-fit: cover; /* Чтобы изображение не искажалось */
+  border-radius: 8px; /* Закругляем углы */
+}
+
+/* Настройки для самой карточки */
+.post-card {
+  position: relative;
+  display: block;
+  width: 100%; /* Смотрим на весь доступный контейнер */
+  max-width: 600px; /* Увеличиваем максимальную ширину карточки */
+  margin: 20px auto;
+  background-color: #fff;
+  text-decoration: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.post-card:hover {
+  transform: scale(1.05); /* Эффект увеличения при наведении */
+}
+
+/* Стили для текста в карточке */
+.post-card h2 {
+  font-size: 1.5rem; /* Увеличиваем шрифт заголовка */
+  margin: 10px 0;
+}
+
+.post-card p {
+  font-size: 1rem;
+  color: #333;
+}
+
   
   /* --- Styling for the header image --- */
   .header-image {
