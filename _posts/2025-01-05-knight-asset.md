@@ -8,7 +8,7 @@ description: "Armored Yellow Dog in Spine 2D with 3 skins. Ready to use."
 tags: [character, game, asset, free]
 ---
 
-## Knight Character Asset
+## Armored Dog Character Asset
 
 This is a **game-ready knight dog character asset** designed for casual games.  
 It includes the following features:
