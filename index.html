@@ -20,6 +20,18 @@ layout: default
 </section>
 
 
+<section class="posts">
+  {% for post in site.posts %}
+    <div class="post-card">
+      <img src="{{ post.image }}" alt="{{ post.title }}">
+      <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+      <p>{{ post.description }}</p>
+      <a href="{{ post.url }}" class="button">Read More</a>
+    </div>
+  {% endfor %}
+</section>
+
+
 <div class="posts">
   {% for post in site.posts %}
     <article class="post">
