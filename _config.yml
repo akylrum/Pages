@@ -11,9 +11,19 @@ description: Gamedeveloper and Animator
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 avatar: https://murlyka.com/images/KnightLogo.gif
 
+
+
+# Категории и фильтры
+collections:
+  templates:
+    output: true
+
+
 #
 # Flags below are optional
 #
+
+
 
 # Includes an icon in the footer for each username you enter
 footer-links:

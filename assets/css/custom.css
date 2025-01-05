@@ -1,0 +1,60 @@
+/* Hero section */
+.hero {
+    text-align: center;
+    padding: 100px 0;
+    background-color: #f4f4f4;
+  }
+  
+  .hero h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+  }
+  
+  .hero p {
+    font-size: 18px;
+    color: #666;
+  }
+  
+  /* Template cards */
+  .templates {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 40px 20px;
+  }
+  
+  .template-card {
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .template-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .template-card h2 {
+    font-size: 24px;
+    margin: 20px;
+  }
+  
+  .template-card p {
+    font-size: 16px;
+    color: #333;
+    margin: 0 20px 20px;
+  }
+  
+  .template-card .button {
+    display: block;
+    text-align: center;
+    padding: 10px;
+    background-color: #0073e6;
+    color: #fff;
+    text-decoration: none;
+    margin: 0 20px 20px;
+    border-radius: 5px;
+  }
+  

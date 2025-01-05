@@ -2,6 +2,24 @@
 layout: default
 ---
 
+<section class="hero">
+  <h1>Welcome to my site</h1>
+  <p>A collection of game assets and works.</p>
+  <a href="/templates" class="button">View All assets</a>
+</section>
+
+<section class="templates">
+  {% for template in site.templates %}
+    <div class="template-card">
+      <img src="{{ template.image }}" alt="{{ template.title }}">
+      <h2>{{ template.title }}</h2>
+      <p>{{ template.description }}</p>
+      <a href="{{ template.url }}" class="button">View Demo</a>
+    </div>
+  {% endfor %}
+</section>
+
+
 <div class="posts">
   {% for post in site.posts %}
     <article class="post">
