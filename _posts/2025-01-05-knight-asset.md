@@ -4,6 +4,7 @@ title: "Armored Dog Character Asset"
 date: 2025-01-05
 categories: assets
 image: https://public-files.gumroad.com/krrctdfuxwf1suwpdjrx8axwud7m
+excerpt: "A set of knight character assets for your game projects."
 description: "Armored Yellow Dog in Spine 2D with 3 skins. Ready to use."
 tags: [character, game, asset, free]
 ---
