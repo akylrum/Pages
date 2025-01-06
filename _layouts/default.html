@@ -5,33 +5,54 @@
     <title>{% if page.title %}{{ page.title }} – {% endif %}{{ site.name }} – {{ site.description }}</title>
 
     {% include meta.html %}
-
+  
+    
     <!--[if lt IE 9]>
       <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}">
     <link rel="alternate" type="application/rss+xml" title="{{ site.name }} - {{ site.description }}" href="{{ site.baseurl }}/feed.xml" />
 
     <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
-   <img src="/images/header.jpg" class="header-image" alt="Header Image">
+   <!-- <img src="/images/header.jpg" class="header-image" alt="Header Image"> -->
   </head>
 
   <body>
+    
     <div class="wrapper-masthead">
+      <div class="header-background"></div>
       <div class="container">
-        <header class="masthead clearfix">
+        <header class="masthead">
+         
           <a href="{{ site.baseurl }}/" class="site-avatar"><img src="{{ site.avatar }}" /></a>
-
           <div class="site-info">
             <h1 class="site-name"><a href="{{ site.baseurl }}/">{{ site.name }}</a></h1>
             <p class="site-description">{{ site.description }}</p>
           </div>
+          <!-- это удаляем через какое-то время
+          {% if page.url == "/" %}
+            <section class="about-me">
+              <p>Hello there! /ᐠ .ᆺ. ᐟ\ﾉ</p>
+              <p>I’m Andrey, a freelance artist focused on creating game-ready assets, animations, and game illustrations. I love bringing ideas to life through cozy, cartoony visuals, and I’m always curious to explore new styles and techniques.</p>
+              <p>Back when my blog was active, I enjoyed sharing my work and free assets with the game dev community. After a long break, I’ve decided to return and continue uploading assets — just like I did before.</p>
+              <p>I hope you’ll find something useful or inspiring here. Thanks for stopping by!</p>
+              <p>💜💜💜</p>
+            </section>
+          {% endif %} -->
 
-          <nav>
-            <a href="{{ site.baseurl }}/">Blog</a>
-            <a href="{{ site.baseurl }}/about">About</a>
+        
+
+          <nav class="navigation">
+            <a href="{{ site.baseurl }}/" class="{% if page.url == "/" %}active{% endif %}">Blog</a>
+            <a href="{{ site.baseurl }}/about" class="{% if page.url == "/about/" %}active{% endif %}">About</a>
+            <a href="{{ site.baseurl }}/asset" class="{% if page.url == "/asset/" %}nav-button asset active{% endif %}">Assets</a>
+            <a href="{{ site.baseurl }}/tutorials" class="{% if page.url == "/tutorials/" %}nav-button tutorial active{% endif %}">Tutorials</a>
+            <a href="{{ site.baseurl }}/portfolio" class="{% if page.url == "/portfolio/" %}nav-button portfolio active{% endif %}">Portfolio</a>
           </nav>
+          
+          
         </header>
       </div>
     </div>

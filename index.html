@@ -2,16 +2,22 @@
 layout: default
 ---
 
-
 <section class="posts-grid">
-  {% for post in site.posts %}
+  {% for post in site.posts limit:15 %}
   <div class="post-card">
     <div class="post-category {{ post.category }}">{{ post.category }}</div>
     <a href="{{ post.url }}">
       <img src="{{ post.image }}" alt="{{ post.title }}">
-    </a>
-    <h2>{{ post.title }}</h2>
+    
+    <h2>{{ post.title }}</h2></a>
+    <p>{{ post.excerpt }}</p>
   </div>
   
   {% endfor %}
 </section>
+<!-- Пагинация 
+<div class="pagination">
+  <a href="{{ site.baseurl }}{{ paginator.previous_page_path }}">Previous</a>
+  <a href="{{ site.baseurl }}{{ paginator.next_page_path }}">Next</a>
+</div>
+-->

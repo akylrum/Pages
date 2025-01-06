@@ -1,3 +1,47 @@
+.site-name a {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3rem;
+  font-weight: bold;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.site-name a:hover {
+  color: #0073e6;
+}
+
+.site-name a {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3,5rem;
+  font-weight: bold;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Легкая тень */
+}
+
+.site-name a:hover {
+  color: #00b7ff; /* Красный цвет при наведении */
+}
+
+
+.header-background {
+  position: absolute;
+  top: -10;
+  left: 0;
+  width: 100%;
+  height: 256px;
+  background-color: #fff8eb; /* Жёлтый цвет */
+  /* background-image: url('https://www.murlyka.com/images/header.jpg'); */
+  background-size: cover; /* Изображение будет покрывать весь блок */
+  background-position: center; /* Центрируем изображение */
+  z-index: -1; /* Ставим фон за контент */
+}
+
+
+
+
 /* --- General styling --- */
 body {
     font-family: 'Arial', sans-serif;
@@ -14,7 +58,77 @@ body {
   a:hover {
     color: #0073e6;
   }
-  
+
+/* --- Центрирование заголовка и подписи --- */
+.wrapper-masthead {
+  background-color: #f9f9f9;
+  padding: 0px 0;
+  text-align: center;
+  position: relative; /* Чтобы элементы в masthead располагались выше фона */
+  z-index: 1;
+}
+.masthead {
+  position: relative; /* Для корректного позиционирования элементов */
+  z-index: 1; /* Чтобы элементы в masthead были выше фона */
+}
+.masthead + nav {
+  position: relative; /* Обычное поведение для блока с навигацией */
+  z-index: 2; /* Навигация поверх фона */
+}
+.site-avatar img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+.site-name {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin: 10px 0;
+}
+
+.site-description {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.site-info p {
+  margin-top: 5px; /* Уменьшаем отступ сверху для описания */
+}
+
+nav a {
+  color: #333;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+nav a:hover {
+  background-color: #eaeaea;
+}
+
+
+/* --- Навигация --- */
+nav {
+  display: inline-block;
+  margin-top: 20px;
+}
+
+nav a.active {
+  color: #3eaff0; /* Красный цвет для активной ссылки */
+  font-weight: bold;
+  border-bottom: 2px solid #3eaff0;
+}
+
+
+
   /* --- Styling for the posts grid --- */
   .posts-grid {
     display: grid;
@@ -49,27 +163,34 @@ body {
 }
 
 .post-card:hover {
-  transform: scale(1.05); /* Эффект увеличения при наведении */
+  transform: scale(1); /* Эффект увеличения при наведении */
 }
 
 /* Стили для текста в карточке */
 .post-card h2 {
   font-size: 1.5rem; /* Увеличиваем шрифт заголовка */
-  margin: 10px 0;
+  margin: 16px 20px 10px;
 }
 
 .post-card p {
   font-size: 1rem;
-  color: #333;
+  color: #666;
+  margin: 0 20px 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;  /* Оставляем только 3 строки, может не работать */
+  -webkit-box-orient: vertical;
 }
 
   
   /* --- Styling for the header image --- */
   .header-image {
     width: 100%;
+    height: 200px;
     object-fit: cover;
     border-bottom: 0px solid #855600;
-    margin-bottom: 5px;
+    margin-bottom: 2px;
   }
 
 /* --- Tooltip for Post Category --- */
@@ -116,4 +237,168 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+
+
+/* Основные стили для навигации */
+.navigation a {
+  color: #333;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-right: 20px;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.navigation a:hover {
+  text-decoration: underline;
+}
+
+/* Стили для активных ссылок (категории) */
+.nav-button {
+  padding: 8px 16px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 4px;
+  text-transform: uppercase;
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Цветные кнопки для активных категорий */
+.nav-button.asset {
+  background-color: #f03e3e; /* Красный для Assets */
+  color: #fff;
+}
+
+.nav-button.tutorial {
+  background-color: #4dabf7; /* Голубой для Tutorials */
+  color: #fff;
+}
+
+.nav-button.portfolio {
+  background-color: #51cf66; /* Зелёный для Portfolio */
+  color: #fff;
+}
+
+/* Стили для активной ссылки */
+.nav-button.active {
+  border: 0px solid #fff;
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+  color: #fff; /* Черный текст на активной кнопке */
+}
+
+
+
+.about-me {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin: 20px auto;  /* Уменьшаем верхнее и нижнее расстояние */
+  padding: 15px;      /* Уменьшаем отступы внутри блока */
+  max-width: 800px;
+  color: #333;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.about-me p {
+  margin-bottom: 10px;
+}
+
+.about-me p:last-child {
+  margin-bottom: 0;
+}
+
+.about-me p:first-child {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  color: #6c757d;
+}
+
+
+/* Стиль для страницы post, обеспечивающий читаемость текста */
+.page {
+  max-width: 800px;  /* Максимальная ширина для удобства восприятия */
+  margin: 40px auto;  /* Отступы сверху и снизу, по центру страницы */
+  padding: 0 20px;  /* Отступы по бокам */
+}
+
+/* Заголовки */
+.page h1, .page h2 {
+  margin-top: 20px;  /* Отступ сверху */
+  margin-bottom: 10px;  /* Отступ снизу */
+  font-size: 2rem;  /* Размер заголовка */
+  color: #333;  /* Цвет текста */
+  
+}
+
+.centered {
+  text-align: center;
+}
+
+/* Текст */
+.page p {
+  line-height: 1.6;  /* Интерлиньяж для удобства чтения */
+  font-size: 1.1rem;  /* Размер шрифта */
+  color: #555;  /* Цвет текста */
+  margin-bottom: 20px;  /* Отступ снизу */
+}
+
+/* Изображения */
+.page img {
+  max-width: 100%;  /* Ограничиваем изображение шириной родительского контейнера */
+  height: auto;  /* Высота подстраивается автоматически */
+  border-radius: 8px;  /* Закругление углов */
+  margin-bottom: 20px;  /* Отступ снизу */
+}
+
+/* Пример для блока с цитатами, если такие будут */
+.page blockquote {
+  padding: 10px 20px;
+  background-color: #f9f9f9;
+  border-left: 4px solid #ccc;
+  margin: 20px 0;
+  font-style: italic;
+  color: #333;
+}
+
+/* Для ссылок */
+.page a {
+  color: #0073e6;  /* Цвет ссылок */
+  text-decoration: none;
+}
+
+.page a:hover {
+  text-decoration: underline;  /* Подчёркивание при наведении */
+}
+
+
+.post {
+  max-width: 900px; /* Установим максимальную ширину */
+  margin: 0 auto; /* Центрируем контент */
+  padding: 20px; /* Добавляем отступы для удобства чтения */
+}
+
+.post h1 {
+  font-size: 2.5rem; /* Увеличиваем размер заголовка */
+  margin-bottom: 20px; /* Отступ снизу */
+  text-align: center; /* Выравниваем заголовок по центру */
+}
+
+.entry {
+  line-height: 1.8; /* Увеличиваем межстрочный интервал для удобства чтения */
+  font-size: 1.1rem; /* Увеличиваем размер шрифта */
+  color: #333; /* Цвет текста для хорошей читаемости */
+  margin-bottom: 40px; /* Отступ снизу */
+}
+
+.entry img {
+  max-width: 100%; /* Изображения не выходят за пределы */
+  height: auto; /* Сохраняем пропорции */
+  margin-top: 20px; /* Отступ сверху */
+  margin-bottom: 20px; /* Отступ снизу */
 }

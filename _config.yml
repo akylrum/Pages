@@ -6,7 +6,7 @@
 name: MURLYKA
 
 # Short bio or description (displayed in the header)
-description: Gamedeveloper and Animator
+description: Gamedeveloper and animator
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 avatar: https://murlyka.com/images/KnightLogo.gif
@@ -17,6 +17,11 @@ avatar: https://murlyka.com/images/KnightLogo.gif
 collections:
   templates:
     output: true
+
+collections:
+  posts:
+    output: true
+
 
 
 #
@@ -105,3 +110,6 @@ plugins:
 # CSS
 include:
   - assets/css/custom.css
+
+paginate: 15
+paginate_path: "/page:num/"

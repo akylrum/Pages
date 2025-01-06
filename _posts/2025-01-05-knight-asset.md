@@ -4,12 +4,12 @@ title: "Armored Dog Character Asset"
 date: 2025-01-05
 category: asset
 image: \images\assets\armoreddog\skins.png
-excerpt: "A set of knight character assets for your game projects."
+excerpt: "A set of armored dog character assets for your game projects."
 description: "Armored Yellow Dog in Spine 2D with 3 skins. Ready to use."
 tags: [character, game, asset, free]
 ---
 
-## Armored Dog Character Asset
+
 
 This is a **game-ready knight dog character asset** designed for casual games.  
 It includes the following features:
