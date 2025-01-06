@@ -16,5 +16,7 @@ I hope you’ll find something useful or inspiring here. Thanks for stopping by!
 
 ### Connect with me:
  You can also check out my **[portfolio](https://www.behance.net/murlyka)** to see more of my work.  
-For business inquiries or just to say hello, email me:![]({{}}/images/howtospine/wheretowrite.png)
+For business inquiries or just to say hello, email me:
+
+![]({{}}/images/howtospine/wheretowrite.png)
 
