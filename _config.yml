@@ -111,5 +111,5 @@ plugins:
 include:
   - assets/css/custom.css
 
-paginate: 15
-paginate_path: "/page:num/"
+# paginate: 30
+# paginate_path: "/page:num/"
