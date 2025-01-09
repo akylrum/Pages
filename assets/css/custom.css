@@ -402,3 +402,8 @@ nav a.active {
   margin-top: 20px; /* Отступ сверху */
   margin-bottom: 20px; /* Отступ снизу */
 }
+
+
+html {
+  overflow-y: scroll;
+}
