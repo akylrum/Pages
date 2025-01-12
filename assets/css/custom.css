@@ -79,25 +79,25 @@ body {
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  margin-bottom: 10px;
+  margin-bottom: 0;
   margin-top: 20px;
 }
 
 .site-name {
-  font-size: 2rem;
+  font-size: 1.4rem;
   font-weight: bold;
   color: #333;
-  margin: 10px 0;
+  margin: 4px 0;
 }
 
 .site-description {
   font-size: 1.2rem;
   color: #666;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .site-info p {
-  margin-top: 5px; /* Уменьшаем отступ сверху для описания */
+  margin-top: 1px; /* Уменьшаем отступ сверху для описания */
 }
 
 nav a {
@@ -317,8 +317,8 @@ p {
 .about-me {
   font-size: 1.1rem;
   line-height: 1.6;
-  margin: 20px auto;  /* Уменьшаем верхнее и нижнее расстояние */
-  padding: 15px;      /* Уменьшаем отступы внутри блока */
+  margin: 10px auto;  /* Уменьшаем верхнее и нижнее расстояние */
+  padding: 5px;      /* Уменьшаем отступы внутри блока */
   max-width: 800px;
   color: #333;
   background-color: #f9f9f9;
@@ -331,7 +331,7 @@ p {
 }
 
 .about-me p:last-child {
-  margin-bottom: 0;
+  margin-bottom: 15px;
 }
 
 .about-me p:first-child {
