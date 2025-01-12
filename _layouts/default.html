@@ -31,7 +31,7 @@
             <h1 class="site-name"><a href="{{ site.baseurl }}/">{{ site.name }}</a></h1>
             <p class="site-description">{{ site.description }}</p>
           </div>
-          <!-- это удаляем через какое-то время
+          <!-- это удаляем через какое-то время-->
           {% if page.url == "/" %}
             <section class="about-me">
               <p>Hello there! /ᐠ .ᆺ. ᐟ\ﾉ</p>
@@ -40,8 +40,9 @@
               <p>I hope you’ll find something useful or inspiring here. Thanks for stopping by!</p>
               <p>💜💜💜</p>
             </section>
-          {% endif %} -->
+          {% endif %} 
 
+          
         
 
           <nav class="navigation">
@@ -52,7 +53,16 @@
             <a href="{{ site.baseurl }}/portfolio" class="{% if page.url == "/portfolio/" %}nav-button portfolio active{% endif %}">Portfolio</a>
           </nav>
           
+          {% if page.url == "/portfolio/" %}
+            <section class="about-me"><p>My actual external portfolio you can find on <a href="https://www.artstation.com/murlyka">artstation</a>, <a href="https://be.net/murlyka">behance</a> and <a href="https://x.com/akylrum/media">twitter</a>.</p>
+            </section>
+          {% endif %} 
           
+          {% if page.url == "/asset/" %}
+            <section class="about-me"><p>Find my assets on <a href="https://akylrum.gumroad.com/">gumroad</a>, <a href="https://akylrum.itch.io/">itch</a> and <a href="https://assetstore.unity.com/publishers/12977">unity asset store</a>.</p>
+            </section>
+          {% endif %} 
+
         </header>
       </div>
     </div>
