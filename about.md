@@ -14,9 +14,10 @@ I hope you’ll find something useful or inspiring here. Thanks for stopping by!
 
 ### 💜💜💜
 
-### Connect with me:
- You can also check out my **[portfolio](https://www.behance.net/murlyka)** to see more of my work.  
-For business inquiries or just to say hello, email me:
+### Connection:
+For commissions, business inquiries or just to say hello, [email me 📧](mailto:to.murlyka@gmail.com)
+You can also check out my **[portfolio](https://www.behance.net/murlyka)** or **[gumroad](https://akylrum.gumroad.com/)** to see more of my work.  
 
-![]({{}}/images/howtospine/wheretowrite.png)
+
+
 
