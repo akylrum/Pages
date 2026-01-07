@@ -1,0 +1,186 @@
+:root {
+  --max-width: 1200px;
+  --gap: 20px;
+  --bg: #f6f6f6; /* Белый фон */
+  --card-bg: #f9f9f9;
+  --muted: #666666;
+  --text: #222222;
+  --accent1: #7c5cff;
+  --accent2: #3aa7ff;
+  --radius: 10px;
+  --container-padding: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.45;
+}
+
+/* Центрирующий контейнер фиксированной ширины */
+.container {
+  width: calc(100% - 2 * var(--container-padding));
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--container-padding) 0;
+}
+
+/* Header / Nav */
+.site-header {
+  padding: 18px 0;
+}
+.brand .logo {
+  font-weight: 700;
+  letter-spacing: -0.6px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 1.05rem;
+  text-align: center;
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* Навигация по центру горизонтально */
+.main-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  padding: 0;
+  margin: 0 auto;
+  justify-content: center;
+  max-width: 100%;
+}
+.main-nav a {
+  color: var(--text);
+  text-decoration: none;
+  padding: 8px 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: inline-block;
+  background: transparent;
+  border: none;
+  outline: none;
+  transition: none;
+}
+.main-nav a:hover,
+.main-nav a:focus {
+  background: transparent;
+  transform: none;
+  outline: none;
+}
+
+/* Hero */
+.hero {
+  margin: 18px 0 28px;
+  text-align: center; /* Заголовок по центру */
+}
+.hero h1 {
+  font-size: 1.6rem;
+  margin: 0 0 6px;
+}
+.lead {
+  color: var(--muted);
+  margin: 0;
+}
+
+/* Grid of 3 cards */
+.grid-links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  align-items: start;
+  margin-bottom: 28px;
+}
+
+/* Карточки */
+.card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 12px;
+  border: none;
+  box-shadow: none;
+  overflow: hidden;
+  transition: none;
+}
+.card:hover,
+.card:focus {
+  transform: none;
+  box-shadow: none;
+  outline: none;
+}
+
+/* Изображения */
+.card img {
+  display: block;
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--accent1), var(--accent2));
+  margin-bottom: 10px;
+  border: none;
+}
+
+/* Заголовок и подпись */
+.card h3 {
+  font-size: 1.02rem;
+  margin: 0 0 6px;
+}
+.card .muted {
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin: 0;
+}
+
+/* Footer */
+.site-footer {
+  border-top: 1px solid #ddd;
+  padding: 18px 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .grid-links {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .card img {
+    height: 140px;
+  }
+}
+@media (max-width: 560px) {
+  .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .main-nav ul {
+    gap: 12px;
+  }
+  .grid-links {
+    grid-template-columns: 1fr;
+  }
+  .card img {
+    height: 120px;
+  }
+  .hero h1 {
+    font-size: 1.3rem;
+  }
+}
+
+/* Убираем outline на всех ссылках и кнопках */
+a:focus,
+button:focus {
+  outline: none;
+}
