@@ -1,137 +1,221 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How to Spine</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #ffffff;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-        }
-        h1, h2 {
-            font-weight: 900;
-            margin-top: 1.8em;
-            font-style: bold;
-        }
-        a {
-            color: #3b82f6; /* Синий цвет */
-            text-decoration: underline;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            margin: 20px 0;
-            display: block;
-        }
-        code {
-            background-color: #f4f4f4;
-            padding: 2px 5px;
-            border-radius: 4px;
-        }
-        pre {
-            background-color: #f4f4f4;
-            padding: 10px;
-            border-radius: 5px;
-            overflow-x: auto;
-        }
-        p {
-            margin-top: 1rem;  /* Маленький отступ сверху */
-            margin-bottom: 1rem; /* Такой же отступ снизу */
-        }
-        .centered-image {
-            display: block; /* Делает изображение блочным элементом */
-            margin: 0 auto; /* Центрирует изображение по горизонтали */
-            border-radius: 15px; /* Закругляет углы */
-            max-width: 100%; /* Ограничивает размер изображения до 100% от контейнера */
-            height: auto; /* Сохраняет пропорции изображения */
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Murlyka Animation</title>
+  <meta name="description" content="" />
+  <style>
+    body {
+      margin: 0;
+      padding: 4vh 2rem;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      background: #fff1b8;
+      color: #111111;
+      display: flex;
+      justify-content: center;
+    }
+    main {
+      max-width: 70ch; 
+      width: 100%;
+    }
+    h1, h2, h3 {
+      line-height: 1.3;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 0.3rem;
+    }
+    p {
+      margin-bottom: 1rem;
+    }
+    section {
+      margin-top: 2rem;
+    }
+    footer {
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      color: #555;
+    }
+    a {
+      color: #0056b3;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .links {
+      display: flex;
+      gap: 1rem;
+      margin: 0.5rem 0 1rem 0;
+      flex-wrap: wrap;
+    }
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    .work-grid article {
+      padding: 1rem;
+    }
+    .work-grid h3 {
+      margin-top: 0;
+    }
 
-    </style>
+
+    .responsive-img {
+      max-width: 100%; 
+      height: auto;    
+      display: block;  
+      margin: 1rem 0;  
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: #0b0f13;
+        color: #f5f5f5;
+      }
+      a {
+        color: #6cb2ff;
+      }
+      footer {
+        color: #999;
+      }
+    }
+  </style>
 </head>
 <body>
-    <main class="max-w-4xl mx-auto">
-            <h3 class="text-2xl font-bold mt-8 mb-4" style="text-align: center;"><a href="https://murlyka.com">/ᐠ .ᆺ. ᐟ\ﾉ</a></h3>
-            <h3 class="text-2xl font-bold mt-8 mb-4" style="text-align: center;">Спайн-анимация для плееблов.</h3>
-            <p class="mt-4 mb-4"><em>early access</em> </p>
-            
-            <p class="mt-4 mb-4"><em>текст не вычитан, ознакамливайтесь с ним на свой страх и риск</em> </p>
-            
-            <p class="mt-4 mb-4">Подготовка спайн-анимации для плееблов имеет ряд отличий от подготовки спайн-анимаций для любых других проектов. Нужно руководствоваться двумя принципами: лёгковесность анимаций и маленький атлас. </p>
-            
-            <h3 class="text-2xl font-bold mt-8 mb-4" style="text-align: center;">Основные тезисы</h3>
-            <p class="mt-4 mb-4">Весь плеебл, как правило, должен занимать не больше 5 мбайт, в очень редких случаях его вес должен быть 2-2.5 мбайта. 
-            В эти 5 мбайт билда должны вмещаться код, вся статика (ui, фоны, пропсы, эффекты), звук с музыкой, и, наконец, спайн анимации. </p>
-            
-            <p class="mt-4 mb-4">На выходе у аниматора есть 1-2 мбайта веса. Не особо разгуляешься, но с этим можно работать.</p>
-            <p class="mt-4 mb-4">Второй важный момент - сами анимации должны быть максимально лёгкими: аниматор должен максимально ограничить себя в использовании фичей вроде мешей и констрейнов.</p>
-            <p class="mt-4 mb-4">Почему так? Эти анимации проигрываются в игре в собственном движке или браузере. Игра в игре, подтянутая извне. Такие игры должны проигрываться одинаково хорошо на всём спектре устройств: от допотопных калькуляторов и чайников, до стиральных машин с утюгами. Это условие тяжело поддерживать, если у нас будет костей чуть больше 50, в меше будет вертексов чуть больше четырёх, весов на вертекс больше двух, и тд. Об этом чуть ниже. </p>
-            <p class="mt-4 mb-4">Пример метрики одного из легковесных персонажей, у которого оставался простор для оптимизации:</p>
-            <p class="mt-4 mb-4"><img src="images/spinemetrics.png" class="centered-image"></p>
-            
-            <h3 class="text-2xl font-bold mt-8 mb-4" style="text-align: center;">Вес и организация скелета</h3>
-            <p class="mt-4 mb-4">Вес экспорта зависит от двух вещей: размер атласа и вес анимации в json. </p>
-            <p class="mt-4 mb-4">Json будет лёгким, если мы не нагрузим проект большим количеством костей, это в свою очередь зависит от того, сколько анимаций, костей и ключей в этих анимациях задействовано. </p>
-            <p class="mt-4 mb-4">Есть простое правило: руки состоят из трёх костей: плеча(hand), предплечья (arm), кисти(palm)  (названия в скобках условное), ноги состоят тоже из трёх частей: бедро (hip/leg), голень(shin), стопа(boot). Тело из одной-двух костей, шею по возможности  смёржить с телом, голова отдельно. </p>
-            <p class="mt-4 mb-4">Зрачки и части лица вроде бровей лучше мёржить вместе, и делорганизовать эмоции списком аттачментов к слоту. Если есть необходимость в анимации волос-тканей, не больше 1-3 костей на сущность. </p>
-            <p class="mt-4 mb-4">Обычный скелет персонажа из HC:</p>
-            <p class="mt-4 mb-4"><img src="images/skeletonexample.png" class="centered-image"></p>
-            <p class="mt-4 mb-4">Сохраните себе нервы - сделайте кость под рутом, назвав её container, scale или main - на скрине выше есть и Container и Main. Это обусловлено тем, что арт персонажей часто присылается в размере x2, x1.5, x3 и аниматор вынужден на своей стороне скейлить скелет до нужного в игре размера. Кость root нельзя трогать вообще ни в каких анимациях (ни вращать, ни скейлить), поэтому для скейла скелета в нужный размер, используется кость вроде Container, Main или с любым другим названием. </p>
-            <p class="mt-4 mb-4">Все остальные части скелета находятся в иерархии под этими костями. Container скейлится в setup, а Main можно изменять внутри анимации - если того требует дело. </p>
-            <h3 class="text-2xl font-bold mt-8 mb-4" style="text-align: center;">Нейминг, регламент и скина</h3>
-            <p class="mt-4 mb-4">Короткие названия из трёх-четырёх букв работают лучше на длинной дистанции разработки, когда надо быстро ориентироваться в куче скелетов и иметь свой собственный общий регламент. К делу не сильно относится, но работающей практикой является переименование частей тела с одной стороны и другой по регламенту: всё, что слева от зрителя это Left, всё, что справа - Right, на момент рига. Таким образом левая рука будет названа HandLeft, ArmLeft, PalmLeft, а правая от зрителя рука HandRight, ArmRight, PalmRight и так далее. </p>
-            <p class="mt-4 mb-4">Иногда разработчики просят переменовывать кости в соответствии с их внутренними правилами, дашбоардами и регламентами. Например, использовать только строчные буквы, а части слов в нейминге разделять дефисом: ArmLeft становится arm-left. Это легко изменить с помощью инструмента поиска в спайне. </p>
-            <p class="mt-4 mb-4"><img src="images/searchusing.png" class="centered-image"></p>
-            <p class="mt-4 mb-4">При необходимости использовать IK перед названием кости, можно прописать префикс IK_, в этом случае BootLeft, на которую будет завязана кинематика ноги (HipLeft &gt; ShinLeft) будет иметь название IK_BootLeft. </p>
-            <p class="mt-4 mb-4"><img src="images/ikreglament.png" class="centered-image"></p>
-            <p class="mt-4 mb-4">В примере я использовал 4 IK кости, две для стоп, две для кистей. Обычно, можно оставлять только стопы, но здесь было много анимаций с оружием и предметом, и нужен был чуть больший контроль в движении, чем обычно. Лучше избежать большого количества IK. </p>
-            <p class="mt-4 mb-4">В проектах часто приходится делать много скинов, поэтому работа сопряжена с частым переименованием аттачментов-спрайтов-изображений в нужный формат. Есть лёгкое решение: в графическом редакторе добавить базовому скину постфикс _base, _hero или _main, а всем остальным другие постфиксы: рыцарю, например _knight. В этом случае, заригав один скин, мы сдублируем его и в поиске просто переименуем _hero в _knight, и всё сработает. Местами иногда требуется поднастроить-подвигать спрайты в спайне. </p>
-            <p class="mt-4 mb-4">Причина такого решения: разработчики плееблов работают в разных движках: construct3, pixiJS, Phaser, Cocos, Unity, TreeJS, Defold, и многих других. Каждый движок имеет разные поддержки рантайма спайн: кто-то ест последнюю свежую стабильную версию спайна, кто-то застрял на древней 3.6. Какие-то движки хорошо используют пути к скинам в папках /skin/handright.png, какие-то нет. </p>
-            <p class="mt-4 mb-4">Для себя отмечу, что использовать подпапки в скинах - плохой тон, этот способ нестабилен, и работает через раз. Даже в крупных красивых больших проектах на заряженных успехом движках подпапки в скинах могут потребовать переделки в систему с постфиксами в названии и уходе от подпапок. </p>
-            <p class="mt-4 mb-4">Пример организации такого варианта. </p>
-            <p class="mt-4 mb-4"><img src="images/skinsexample.png" class="centered-image"></p>
-            <h3 class="text-2xl font-bold mt-8 mb-4" style="text-align: center;">Оптимизация анимации и мешей.</h3>
-            <p class="mt-4 mb-4">Аниматор плееблов это больше технический аниматор, чем аниматор творческий. Чем меньше ключей, тем лучше, чем меньше костей, тем лучше, чем меньше мешей, тем лучше. </p>
-            <p class="mt-4 mb-4">В идеале должно срабатывать правило, указанное выше - на часть тела не больше трёх костей, где можно избежать костей, лучше их убрать. Эмоции нужно аттачить к одному слоту, и менять их в анимации. Их количество лучше сократить. </p>
-            <p class="mt-4 mb-4">При экспорте анимации в json нельзя забывать о чекбоксе animation clean up. </p>
-            <p class="mt-4 mb-4">Анимация Idle может быть подкручена тремя костями, например. </p>
-            <p class="mt-4 mb-4"><img src="images/idleexample.png" class="centered-image"></p>
-            <p class="mt-4 mb-4">Аниматор плееблов это не про rich-анимацию, это про техничность испольнения, урезание своего творческого позыва сделать красиво и про сильные рамки и ограничения. </p>
-            <p class="mt-4 mb-4">Меши - краеугольный камень оптимизации анимаций не только для плееблов, но и для всех анимаций вообще. </p>
-            <p class="mt-4 mb-4">Где можно избежать использования мешей, там лучше их не делать. В идеале вообще не использовать меши. Если используются в проекте, то только при острой необходимости: обтягивающая юбка, длинная причёска странной формы, смёрженные особым образом штаны или платье от художников. </p>
-            <p class="mt-4 mb-4">В каждом из этих случаев стоит руководствоваться принципом на кость не больше четырёх вертексов. Если кости две у меша, то вертексов 6, если кости три, то 8 вертексов. Этого правила стоит придерживаться, но именно в мешах и работе с ними часто приходится от него отказываться или модифицировать его. </p>
-            <p class="mt-4 mb-4">Пример юбки, которая должна активно растягиваться при беге. Обычный спрайт на четыре вертекса. Основной является кость Skirt, две других - ноги, имеют влияение в весах только на нижние точки меша, и то не полностью. Настраивается это индвидуально. Но правила - не более двух весов на вертекс стоит придерживаться максимально: от этого сильно зависит вычислительная оптимизация анимаций.</p>
-            <p class="mt-4 mb-4"><img src="images/meshesexampleone.png" class="centered-image"></p>
-            <p class="mt-4 mb-4">Пример второй, юбка больше, костей больше, персонаж должен ходить. 7 вертексов на 4 кости. На каждый вертекс не больше двух весов. </p>
-            <p class="mt-4 mb-4"><img src="images/meshesexampleuno.png" class="centered-image"></p>
-            <p class="mt-4 mb-4">Пример третий. Странный крой штанов, работаем с тем, что дают, если есть ограничения по времени, а выжимать нужно максимум, отходим от правила минимазации вертексов, но не минимизации весов. </p>
-            <p class="mt-4 mb-4"><img src="images/meshesexampletwo.png" class="centered-image"></p>
-            <h3 class="text-2xl font-bold mt-8 mb-4" style="text-align: center;">Оптимизация арта.</h3>
-            <p class="mt-4 mb-4">Большие спрайты по возможности нужно нарезать в редакторе на маленькие, дублированные или похожие спрайты лучше не использовать ни в скинах, ни в рамках одного скелета. </p>
-            <p class="mt-4 mb-4">Cиние ладони от разных скинов одного персонажа достаточно сильно похожи друг на друга, поэтому можно в проекте оставить только одну пару из них. Принебречь можно даже слегка (или сильно) отличающимися оттенками</p>
-            <p class="mt-4 mb-4"><img src="images/palms.png" class="centered-image"></p>
-            <p class="mt-4 mb-4">В эту же область можно отнести использование похожих парных частей тела, например, если левая голень и правая голень, или ботинки, одинаковы или очень похожи. </p>
-            <p class="mt-4 mb-4"><img src="images/shins.png" class="centered-image"></p>
-            <p class="mt-4 mb-4">Необходимо уменьшать вес белого пустого пространства так, чтобы границы спрайта были максимально приближены к изображению. Это же справедливо для элементов, которые повёрнуты, и на спрайте много много пустого пространства. Слева <em>неправильный</em> ботинок. </p>
-            <p class="mt-4 mb-4"><img src="images/boots.png" class="centered-image"></p>
-            <p class="mt-4 mb-4">Это всё снижает вес атласа - главную область оптимизации занимаемого веса экспортируемой анимации. </p>
-            <p class="mt-4 mb-4">В процессе экспорта анимации надо постараться использовать скейл равный или меньший скейлу кости, сделанной под рутом. Если там скейл 0.5, то сделать экспорт 0.5~0.4 или даже до 0.3, если качество позволит. </p>
-            <p class="mt-4 mb-4">Нужный скейл анимации может подсказать разработчик, который сообщит, скейлил ли он тестовый экспорт, и в какую сторону. В зависимости от этого, мы выбираем нужный нам скейл кости Container/Scale/Main, и выставляем похожий или меньший скейл в настройках экспорта. </p>
-            <p class="mt-4 mb-4">Итоговый атлас должен быть меньше 1024х1024, в идеале меньше 512х512, ещё лучше, если будет 256х256, но тут зависит от количества скинов. В настройке указать чекбокс Power of Two. </p>
-            <p class="mt-4 mb-4"><img src="images/exportsettings.png" class="centered-image"></p>
-            <p class="mt-4 mb-4">Спасибо, что прочли. </p>
-            <p class="mt-4 mb-4">Есть вопросы? <a href="mailto:to.murlyka@gmail.com">Напишите мне.</a></p>
-            
-            
-    </main>
+  <main>
+    <header>
+      <h2></h2>
+    </header>
+  <section id="start">
+  <h1>How to spine for optimization</h1>
+  
+    <p>Spine Animation for Playable Projects</p>
+<h3>Spine Animation for Playables</h3>
+<p><em>early access</em></p>
 
-    <footer class="text-1xl mt-8 mb-4" style="text-align: center;">
-        <p>&copy; 2025 <a href="https://murlyka.com"> /ᐠ .ᆺ. ᐟ\ﾉ Murlyka</a></p>
+<p><em>Text not proofread, read at your own risk</em></p>
+
+<p>Preparing Spine animations for playables has several differences compared to preparing animations for other types of projects. The two main principles to follow are lightweight animations and small atlases.</p>
+
+<h3>Key Points</h3>
+
+<p>A playable game usually should not exceed 5 MB. In rare cases, it can be around 2-2.5 MB.</p>
+
+<p>Within this 5 MB limit, you need to fit the code, static assets (UI, backgrounds, props, effects), sound, music, and finally, Spine animations.</p>
+
+<p>For animators, this means they have 1-2 MB available for animations. Not much room to maneuver, but it’s workable.</p>
+
+<p>Another crucial point is that the animations themselves need to be as lightweight as possible. Animators should limit the use of features like meshes and constraints.</p>
+
+<h4>Why?</h4>
+<p>These animations are played within a game engine or browser, essentially as a “game within a game” pulled from external sources. Such games need to run equally well across all devices — from old calculators and toasters to washing machines and irons. Maintaining this performance is challenging if your skeleton has more than 50 bones, meshes with more than four vertices, or more than two weights per vertex. More on this below.</p>
+
+<p>Example metrics from a lightweight character with room for optimization:</p>
+
+<p><img src="https://murlyka.com/images/howtospine/spinemetrics.png" alt="" /></p>
+
+<h3 id="weight-and-skeleton-organization">Weight and Skeleton Organization</h3>
+
+<p>The export weight depends on two things: the atlas size and the animation JSON size.</p>
+
+<p>The JSON will be lighter if the project isn’t overloaded with bones, which depends on the number of animations, bones, and keys used in those animations.</p>
+
+<p>A simple rule: arms consist of three bones — shoulder (hand), forearm (arm), palm (palm). Legs also consist of three bones — thigh (hip/leg), shin (shin), foot (boot). The body should have one or two bones, the neck should be merged with the body if possible, and the head should be separate.</p>
+
+<p>Merge pupils and facial features like eyebrows together, and organize emotions using attachment lists for slots. If hair or cloth animation is needed, limit it to 1-3 bones per entity.</p>
+
+<p>A typical HC character skeleton:</p>
+
+<p><img src="https://murlyka.com/images/howtospine/skeletonexample.png" alt="" /></p>
+
+<p>Save yourself some trouble by creating a bone under the root called “container,” “scale,” or “main.” In the screenshot above, there’s both a Container and Main bone. This is because character art often comes in sizes like x2, x1.5, x3, and animators need to scale the skeleton accordingly. The root bone should never be altered in any animation (no rotation or scaling), so use the Container or Main bone for scaling.</p>
+
+<p>All other skeleton parts should be under these bones. The Container should be scaled in the setup, while the Main can be adjusted within animations if needed.</p>
+
+<h3>Naming Conventions and Skins</h3>
+
+<p>Short names with three to four letters work better for long-term projects. For instance, naming the left and right body parts as seen from the viewer: HandLeft, ArmLeft, PalmLeft for the left arm, and HandRight, ArmRight, PalmRight for the right arm.</p>
+
+<p>Sometimes developers request specific naming conventions, such as using lowercase letters and separating words with hyphens: ArmLeft becomes arm-left. This can be easily changed using Spine’s search tool:</p>
+
+<p><img src="https://murlyka.com/images/howtospine/searchusing.png" alt="" /></p>
+
+<p>When using IK, add the “IK_” prefix to the bone name. For example, BootLeft used for leg IK can become IK_BootLeft.</p>
+
+<p><img src="https://murlyka.com/images/howtospine/ikreglament.png" alt="" /></p>
+
+<p>In the example above, I used four IK bones: two for the feet and two for the hands. Usually, only feet are necessary, but in this case, there were many animations involving weapons and objects, requiring more control.</p>
+
+<p>In projects with many skins, frequent renaming of attachments is needed. One easy solution is to add a suffix like _base, _hero, or _main to the base skin, and other suffixes to specific skins, like _knight.</p>
+
+<p>For example:</p>
+
+<p><img src="https://murlyka.com/images/howtospine/skinsexample.png" alt="" /></p>
+
+<h3 id="animation-and-mesh-optimization">Animation and Mesh Optimization</h3>
+
+<p>A playable animator is more of a technical animator than a creative one. The fewer keys, bones, and meshes, the better.</p>
+
+<p>Ideally, the rule should be followed: three bones per body part, and emotions should be attached to a single slot and swapped in animations.</p>
+
+<p>When exporting animations to JSON, don’t forget to check the “Animation Cleanup” option.</p>
+
+<p>Idle animation can be controlled with just three bones:</p>
+
+<p><img src="https://murlyka.com/images/howtospine/idleexample.png" alt="" /></p>
+
+<p>Playable animators aren’t about rich animations but about technical execution and strict limitations.</p>
+
+<p>Meshes are a cornerstone of animation optimization. Use them only when absolutely necessary, such as for complex clothing or hair. Keep vertex weights low:</p>
+
+<p><img src="https://murlyka.com/images/howtospine/meshesexampleone.png" alt="" /></p>
+
+<p>Another example:</p>
+
+<p><img src="https://murlyka.com/images/howtospine/meshesexampleuno.png" alt="" /></p>
+
+<p>And a more complex case:</p>
+
+<p><img src="https://murlyka.com/images/howtospine/meshesexampletwo.png" alt="" /></p>
+
+<h3 id="art-optimization">Art Optimization</h3>
+
+<p>Large sprites should be sliced into smaller pieces. Duplicate or similar sprites should not be used across skins or within a skeleton.</p>
+
+<p>For example, if left and right hands are similar, only use one sprite:</p>
+
+<p><img src="https://murlyka.com/images/howtospine/palms.png" alt="" /></p>
+
+<p>The same applies to legs and boots:</p>
+
+<p><img src="https://murlyka.com/images/howtospine/shins.png" alt="" /></p>
+
+<p>Reduce white space around sprites and ensure the sprite boundaries are tight. Here’s an example of improper vs. proper sprite usage:</p>
+
+<p><img src="https://murlyka.com/images/howtospine/boots.png" alt="" /></p>
+
+<p>The final atlas should ideally be 512x512 or smaller. Check “Power of Two” in export settings.</p>
+
+<p><img src="https://murlyka.com/images/howtospine/exportsettings.png" alt="" /></p>
+
+<p>Thanks for reading! Have questions? Feel free to reach out!</p>
+
+    <section id="contact">
+      <h3>Connection:</h3>
+      <p>For commissions, business inquiries or just to say hello, <a href="mailto:to.murlyka@gmail.com">email me 📧</a></p>
+    </section>
+
+
+  
+    <footer>
+      <p>© Andrey Pomazan <span id="year">2010 - 2026</span>.</p>
     </footer>
+  </main>
 </body>
 </html>
+
