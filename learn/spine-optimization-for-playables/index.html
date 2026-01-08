@@ -117,7 +117,7 @@
 
 <p>Example metrics from a lightweight character with room for optimization:</p>
 
-<p><img src="https://murlyka.com/images/howtospine/spinemetrics.png" alt="" /></p>
+<p><img src="https://murlyka.com/images/turoials/howtospine/spinemetrics.png" alt="" /></p>
 
 <h3 id="weight-and-skeleton-organization">Weight and Skeleton Organization</h3>
 
@@ -131,7 +131,7 @@
 
 <p>A typical HC character skeleton:</p>
 
-<p><img src="https://murlyka.com/images/howtospine/skeletonexample.png" alt="" /></p>
+<p><img src="https://murlyka.com/images/turoials/howtospine/skeletonexample.png" alt="" /></p>
 
 <p>Save yourself some trouble by creating a bone under the root called “container,” “scale,” or “main.” In the screenshot above, there’s both a Container and Main bone. This is because character art often comes in sizes like x2, x1.5, x3, and animators need to scale the skeleton accordingly. The root bone should never be altered in any animation (no rotation or scaling), so use the Container or Main bone for scaling.</p>
 
@@ -143,19 +143,19 @@
 
 <p>Sometimes developers request specific naming conventions, such as using lowercase letters and separating words with hyphens: ArmLeft becomes arm-left. This can be easily changed using Spine’s search tool:</p>
 
-<p><img src="https://murlyka.com/images/howtospine/searchusing.png" alt="" /></p>
+<p><img src="https://murlyka.com/images/turoials/howtospine/searchusing.png" alt="" /></p>
 
 <p>When using IK, add the “IK_” prefix to the bone name. For example, BootLeft used for leg IK can become IK_BootLeft.</p>
 
-<p><img src="https://murlyka.com/images/howtospine/ikreglament.png" alt="" /></p>
+<p><img src="https://murlyka.com/images/turoials/howtospine/ikreglament.png" alt="" /></p>
 
 <p>In the example above, I used four IK bones: two for the feet and two for the hands. Usually, only feet are necessary, but in this case, there were many animations involving weapons and objects, requiring more control.</p>
-
+<p><img src="https://murlyka.com/images/turoials/howtospine/tree.png" alt="" /></p>
 <p>In projects with many skins, frequent renaming of attachments is needed. One easy solution is to add a suffix like _base, _hero, or _main to the base skin, and other suffixes to specific skins, like _knight.</p>
 
 <p>For example:</p>
 
-<p><img src="https://murlyka.com/images/howtospine/skinsexample.png" alt="" /></p>
+<p><img src="https://murlyka.com/images/turoials/howtospine/skinsexample.png" alt="" /></p>
 
 <h3 id="animation-and-mesh-optimization">Animation and Mesh Optimization</h3>
 
@@ -167,21 +167,21 @@
 
 <p>Idle animation can be controlled with just three bones:</p>
 
-<p><img src="https://murlyka.com/images/howtospine/idleexample.png" alt="" /></p>
+<p><img src="https://murlyka.com/images/turoials/howtospine/idleexample.png" alt="" /></p>
 
 <p>Playable animators aren’t about rich animations but about technical execution and strict limitations.</p>
 
 <p>Meshes are a cornerstone of animation optimization. Use them only when absolutely necessary, such as for complex clothing or hair. Keep vertex weights low:</p>
 
-<p><img src="https://murlyka.com/images/howtospine/meshesexampleone.png" alt="" /></p>
+<p><img src="https://murlyka.com/images/turoials/howtospine/meshesexampleone.png" alt="" /></p>
 
 <p>Another example:</p>
 
-<p><img src="https://murlyka.com/images/howtospine/meshesexampleuno.png" alt="" /></p>
+<p><img src="https://murlyka.com/images/turoials/howtospine/meshesexampleuno.png" alt="" /></p>
 
 <p>And a more complex case:</p>
 
-<p><img src="https://murlyka.com/images/howtospine/meshesexampletwo.png" alt="" /></p>
+<p><img src="https://murlyka.com/images/turoials/howtospine/meshesexampletwo.png" alt="" /></p>
 
 <h3 id="art-optimization">Art Optimization</h3>
 
@@ -189,19 +189,19 @@
 
 <p>For example, if left and right hands are similar, only use one sprite:</p>
 
-<p><img src="https://murlyka.com/images/howtospine/palms.png" alt="" /></p>
+<p><img src="https://murlyka.com/images/turoials/howtospine/palms.png" alt="" /></p>
 
 <p>The same applies to legs and boots:</p>
 
-<p><img src="https://murlyka.com/images/howtospine/shins.png" alt="" /></p>
+<p><img src="https://murlyka.com/images/turoials/howtospine/shins.png" alt="" /></p>
 
 <p>Reduce white space around sprites and ensure the sprite boundaries are tight. Here’s an example of improper vs. proper sprite usage:</p>
 
-<p><img src="https://murlyka.com/images/howtospine/boots.png" alt="" /></p>
+<p><img src="https://murlyka.com/images/turoials/howtospine/boots.png" alt="" /></p>
 
 <p>The final atlas should ideally be 512x512 or smaller. Check “Power of Two” in export settings.</p>
 
-<p><img src="https://murlyka.com/images/howtospine/exportsettings.png" alt="" /></p>
+<p><img src="https://murlyka.com/images/turoials/howtospine/exportsettings.png" alt="" /></p>
 
 <p>Thanks for reading! Have questions? Feel free to reach out!</p>
 
