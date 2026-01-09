@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Banch of Art and animation</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #ffffff;
+            font-family: sans-serif;
+        }
+
+        /* Columns-based grid */
+        .grid {
+            column-count: 6;
+            column-gap: 12px;
+        }
+
+        .grid img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 12px;
+            border-radius: 0px;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 1200px) {
+            .grid { column-count: 3; }
+        }
+
+        @media (max-width: 800px) {
+            .grid { column-count: 2; }
+        }
+
+        @media (max-width: 480px) {
+            .grid { column-count: 1; }
+        }
+
+        .layout {
+            display: flex;
+            gap: 20px;
+        }
+
+        .intro-fixed {
+            width: 260px;
+            flex-shrink: 0;
+        }
+
+        
+    </style>
+</head>
+<body>
+
+<div class="grid" id="imageGrid">
+      <div class="intro">
+        <h2>B<i>u</i>nch of Art</h2>
+        <p>This is a collection of personal doodles, sketches, and small artworks created over time /ᐠ .ᆺ. ᐟ\ﾉ <br> Enjoy browsing through this b<i>u</i>nch!<br><br>
+        <i>Reload to update</i><br>
+        <a href="https://murlyka.com">go to main</a>
+        </p>
+    </div>
+</div>
+
+<script>
+    const imageCount = 100; // максимальный номер imageX
+    const imagePath = "images/";
+    const extensions = ["png", "jpg", "gif"];
+
+    const images = [];
+
+    for (let i = 1; i <= imageCount; i++) {
+        for (const ext of extensions) {
+            images.push(`${imagePath}image${i}.${ext}`);
+        }
+    }
+
+    // перемешивание массива
+    for (let i = images.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [images[i], images[j]] = [images[j], images[i]];
+    }
+
+    const grid = document.getElementById("imageGrid");
+
+    images.forEach(src => {
+        const img = new Image();
+        img.src = src;
+        img.loading = "lazy";
+
+        // если файл не существует — просто не показываем
+        img.onerror = () => img.remove();
+
+        grid.appendChild(img);
+    });
+</script>
+
+
+</body>
+</html>
