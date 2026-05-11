@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Playground Collect by Murlyka</title>
+    <style>
+        :root {
+            --panel: rgba(255, 255, 255, 0.92);
+            --line: #d9dee8;
+            --text: #243041;
+            --muted: #687386;
+            --accent: #2f8c7c;
+            --blue: #3867c8;
+            --danger: #c94f5a;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #f4efe4;
+            color: var(--text);
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        canvas { display: block; }
+
+        .panel {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            bottom: 14px;
+            width: min(380px, calc(100vw - 28px));
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 14px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--panel);
+            box-shadow: 0 18px 45px rgba(31, 41, 55, 0.14);
+            backdrop-filter: blur(14px);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.15;
+        }
+
+        .subtle {
+            margin-top: 4px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .stats, .toolbar, .preset-grid {
+            display: grid;
+            gap: 8px;
+        }
+
+        .stats { grid-template-columns: repeat(3, 1fr); }
+        .toolbar { grid-template-columns: repeat(3, 1fr); }
+        .preset-grid { grid-template-columns: repeat(2, 1fr); }
+
+        .stat {
+            min-width: 0;
+            padding: 8px;
+            border: 1px solid var(--line);
+            border-radius: 7px;
+            background: #fff;
+        }
+
+        .stat span {
+            display: block;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.2;
+        }
+
+        .stat strong {
+            display: block;
+            margin-top: 2px;
+            font-size: 16px;
+            line-height: 1.2;
+        }
+
+        button, label.file-button {
+            min-height: 34px;
+            border: 1px solid var(--line);
+            border-radius: 7px;
+            background: #fff;
+            color: var(--text);
+            font: inherit;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        button:hover, label.file-button:hover { border-color: #aeb8c8; background: #f7fafc; }
+        button.primary { color: #fff; background: var(--accent); border-color: #236b61; }
+        button.danger { color: #fff; background: var(--danger); border-color: #a83d47; }
+        button.active { color: #fff; background: var(--blue); border-color: #2857a7; }
+
+        .scroll {
+            overflow: auto;
+            padding-right: 2px;
+        }
+
+        details {
+            margin-bottom: 10px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        summary {
+            cursor: pointer;
+            padding: 10px 11px;
+            font-weight: 650;
+            font-size: 13px;
+            list-style: none;
+        }
+
+        summary::-webkit-details-marker { display: none; }
+
+        .section-body {
+            display: grid;
+            gap: 10px;
+            padding: 0 11px 11px;
+        }
+
+        .control {
+            display: grid;
+            grid-template-columns: 118px 1fr 62px;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .control label {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        input[type="range"] { width: 100%; accent-color: var(--accent); }
+
+        input[type="number"], textarea {
+            width: 100%;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            background: #fff;
+            color: var(--text);
+            font: inherit;
+            font-size: 12px;
+        }
+
+        input[type="number"] { padding: 6px 7px; }
+        input[type="file"] { display: none; }
+
+        textarea {
+            min-height: 132px;
+            padding: 8px;
+            resize: vertical;
+            font-family: Consolas, "Courier New", monospace;
+            line-height: 1.35;
+        }
+
+        label.file-button {
+            display: inline-grid;
+            place-items: center;
+            text-align: center;
+        }
+
+        .code-panel {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            bottom: 14px;
+            width: min(560px, calc(100vw - 430px));
+            min-width: 340px;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            padding: 14px;
+            border-radius: 8px;
+            background: rgba(17, 24, 39, 0.94);
+            color: #e5edf7;
+        }
+
+        .code-panel.visible { display: flex; }
+
+        .code-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        select {
+            min-height: 34px;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            background: #fff;
+            font: inherit;
+            font-size: 12px;
+        }
+
+        pre {
+            flex: 1;
+            margin: 0;
+            padding: 12px;
+            border-radius: 8px;
+            background: #0b1020;
+            overflow: auto;
+            white-space: pre-wrap;
+            font: 12px/1.45 Consolas, "Courier New", monospace;
+        }
+
+        .toast {
+            position: absolute;
+            right: 18px;
+            bottom: 18px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: rgba(31, 41, 55, 0.92);
+            color: white;
+            font-size: 13px;
+            opacity: 0;
+            transform: translateY(8px);
+            pointer-events: none;
+            transition: opacity 150ms ease, transform 150ms ease;
+        }
+
+        .toast.visible { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 900px) {
+            .panel { width: calc(100vw - 28px); max-height: 54vh; bottom: auto; }
+            .code-panel { left: 14px; right: 14px; top: auto; width: auto; min-width: 0; height: 40vh; }
+            .control { grid-template-columns: 102px 1fr 58px; }
+        }
+    </style>
+</head>
+<body>
+    <aside class="panel" aria-label="Настройки 3D Playground">
+        <div class="panel-header">
+            <div>
+                <h1>3D Collect Playground</h1>
+                <div class="subtle">Казуальный collect-полет к цели by <a href="https://murlyka.com">murlyka</a></div>
+            </div>
+            <button id="toggleCode">Код</button>
+        </div>
+
+        <div class="stats">
+            <div class="stat"><span>Кубы</span><strong id="cubeCount">0 / 500</strong></div>
+            <div class="stat"><span>Летят</span><strong id="flyingCount">0</strong></div>
+            <div class="stat"><span>Готовы</span><strong id="readyCount">0</strong></div>
+        </div>
+
+        <div class="toolbar">
+            <button id="emitBtn" class="primary">Запуск</button>
+            <button id="finishBtn">В цель</button>
+            <button id="clearBtn" class="danger">Очистить</button>
+        </div>
+
+        <div class="scroll">
+            <details open>
+                <summary>Пресеты</summary>
+                <div id="presetGrid" class="section-body preset-grid"></div>
+            </details>
+
+            <details open>
+                <summary>Генерация</summary>
+                <div class="section-body" id="generatorControls"></div>
+            </details>
+
+            <details>
+                <summary>Падение</summary>
+                <div class="section-body" id="physicsControls"></div>
+            </details>
+
+            <details>
+                <summary>Полет в цель</summary>
+                <div class="section-body" id="collectControls"></div>
+            </details>
+
+            <details>
+                <summary>Экспорт / импорт JSON</summary>
+                <div class="section-body">
+                    <div class="toolbar">
+                        <button id="copyJsonBtn">Copy</button>
+                        <button id="downloadJsonBtn">Download</button>
+                        <label class="file-button" for="jsonFile">Import</label>
+                    </div>
+                    <input id="jsonFile" type="file" accept="application/json,.json">
+                    <textarea id="jsonText" spellcheck="false" aria-label="JSON"></textarea>
+                    <button id="applyJsonBtn">Применить JSON</button>
+                </div>
+            </details>
+        </div>
+    </aside>
+
+    <aside id="codePanel" class="code-panel" aria-label="Просмотр кода">
+        <div class="code-head">
+            <strong>Код функционала</strong>
+            <select id="codeSelect"></select>
+            <button id="copyCodeBtn">Copy</button>
+            <button id="closeCode">Закрыть</button>
+        </div>
+        <pre id="codeOutput"></pre>
+    </aside>
+
+    <div id="toast" class="toast"></div>
+
+    <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xf4efe4);
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(22, 18, 28);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        document.body.appendChild(renderer.domElement);
+
+        scene.add(new THREE.HemisphereLight(0xffffff, 0xd8cab5, 1.25));
+        const sun = new THREE.DirectionalLight(0xffffff, 1.25);
+        sun.position.set(15, 25, 10);
+        sun.castShadow = true;
+        scene.add(sun);
+        scene.add(new THREE.GridHelper(60, 60, 0xc9d2dc, 0xe1e6ec));
+
+        const matStart = new THREE.MeshStandardMaterial({ color: 0x8fd7b5, roughness: 0.6 });
+        const matFinish = new THREE.MeshStandardMaterial({ color: 0xff8f99, roughness: 0.55 });
+        const matField = new THREE.MeshStandardMaterial({ color: 0xb6d98f, transparent: true, opacity: 0.38, roughness: 0.75 });
+        const matWood = new THREE.MeshStandardMaterial({ color: 0xffd8a8, roughness: 0.72, metalness: 0.02 });
+
+        const startCube = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.5, 1.5), matStart);
+        startCube.position.set(-12, 8, 0);
+        startCube.castShadow = true;
+        scene.add(startCube);
+
+        const finishCube = new THREE.Mesh(new THREE.BoxGeometry(1.7, 1.7, 1.7), matFinish);
+        finishCube.position.set(12, 1.05, 0);
+        finishCube.castShadow = true;
+        scene.add(finishCube);
+
+        const fieldParams = { radius: 5 };
+        const fieldDisk = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 0.12, 72), matField);
+        fieldDisk.position.set(2, 0.06, 0);
+        fieldDisk.receiveShadow = true;
+        scene.add(fieldDisk);
+
+        const MAX_INSTANCE_CAPACITY = 2000;
+        const woods = [];
+        const dummy = new THREE.Object3D();
+        const hiddenMatrix = new THREE.Matrix4().makeScale(0, 0, 0);
+        const sharedBox = new THREE.BoxGeometry(1, 1, 1);
+        const woodMesh = new THREE.InstancedMesh(sharedBox, matWood, MAX_INSTANCE_CAPACITY);
+        woodMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+        matWood.needsUpdate = true;
+        woodMesh.castShadow = true;
+        woodMesh.receiveShadow = true;
+        woodMesh.count = 0;
+        scene.add(woodMesh);
+
+        let isEmitting = false;
+        let emissionTimer = 0;
+        let lastSpawnTime = 0;
+        let currentPreset = 'balanced';
+        let statsTimer = 0;
+
+        const config = {
+            spawnDuration: 3.0,
+            spawnRate: 0.14,
+            burstCount: 5,
+            maxCubes: 500,
+            cohesion: 0.55,
+            fieldRadius: 5,
+            gravity: 24,
+            jumpPower: 12,
+            throwPower: 10,
+            bounciness: 0.55,
+            friction: 0.96,
+            chaos: 0.28,
+            collectSpeed: 1.9,
+            collectArc: 6.0,
+            collectStagger: 0.035,
+            collectSpread: 1.4
+        };
+
+        const presets = {
+            balanced: { label: 'Сбалансированный', spawnRate: 0.14, burstCount: 5, maxCubes: 500, cohesion: 0.55, fieldRadius: 5, gravity: 24, jumpPower: 12, throwPower: 10, bounciness: 0.55, friction: 0.96, chaos: 0.28, collectSpeed: 1.9, collectArc: 6, collectStagger: 0.035, collectSpread: 1.4 },
+            soft: { label: 'Мягкий', spawnRate: 0.18, burstCount: 4, maxCubes: 420, cohesion: 0.72, fieldRadius: 5.5, gravity: 18, jumpPower: 9, throwPower: 7.5, bounciness: 0.35, friction: 0.985, chaos: 0.12, collectSpeed: 1.55, collectArc: 4.5, collectStagger: 0.045, collectSpread: 0.9 },
+            chaotic: { label: 'Хаотичный', spawnRate: 0.06, burstCount: 10, maxCubes: 850, cohesion: 0.18, fieldRadius: 7, gravity: 30, jumpPower: 18, throwPower: 13, bounciness: 0.72, friction: 0.91, chaos: 0.9, collectSpeed: 2.6, collectArc: 8.5, collectStagger: 0.02, collectSpread: 2.7 },
+            precise: { label: 'Точный', spawnRate: 0.2, burstCount: 3, maxCubes: 300, cohesion: 0.92, fieldRadius: 4.2, gravity: 24, jumpPower: 11, throwPower: 9.5, bounciness: 0.28, friction: 0.99, chaos: 0.03, collectSpeed: 1.8, collectArc: 4.0, collectStagger: 0.055, collectSpread: 0.35 },
+            heavy: { label: 'Тяжелый', spawnRate: 0.2, burstCount: 5, maxCubes: 450, cohesion: 0.48, fieldRadius: 5, gravity: 48, jumpPower: 15, throwPower: 8, bounciness: 0.18, friction: 0.88, chaos: 0.2, collectSpeed: 1.45, collectArc: 3.2, collectStagger: 0.04, collectSpread: 0.8 },
+            bouncy: { label: 'Прыгучий', spawnRate: 0.11, burstCount: 6, maxCubes: 650, cohesion: 0.38, fieldRadius: 5.8, gravity: 22, jumpPower: 17, throwPower: 10.5, bounciness: 0.92, friction: 0.97, chaos: 0.28, collectSpeed: 2.1, collectArc: 7.2, collectStagger: 0.03, collectSpread: 1.6 },
+            rain: { label: 'Дождь', spawnRate: 0.045, burstCount: 12, maxCubes: 1000, cohesion: 0.62, fieldRadius: 8, gravity: 34, jumpPower: 7, throwPower: 3.5, bounciness: 0.22, friction: 0.94, chaos: 0.18, collectSpeed: 2.2, collectArc: 6.5, collectStagger: 0.018, collectSpread: 1.9 },
+            fountain: { label: 'Фонтан', spawnRate: 0.08, burstCount: 7, maxCubes: 750, cohesion: 0.36, fieldRadius: 5.2, gravity: 26, jumpPower: 24, throwPower: 7, bounciness: 0.55, friction: 0.965, chaos: 0.45, collectSpeed: 2.7, collectArc: 9.2, collectStagger: 0.025, collectSpread: 2.1 },
+            magnetic: { label: 'Магнитный', spawnRate: 0.09, burstCount: 6, maxCubes: 700, cohesion: 0.98, fieldRadius: 4.5, gravity: 20, jumpPower: 10, throwPower: 15, bounciness: 0.4, friction: 0.975, chaos: 0.08, collectSpeed: 2.5, collectArc: 5.5, collectStagger: 0.025, collectSpread: 0.55 }
+        };
+
+        const snippets = {
+            collect: `// Casual collect animation: object flies to target on a high arc.
+// Engine-agnostic idea:
+// 1. Save start position when collection begins.
+// 2. Build one control point above the middle of the path.
+// 3. Move object along a quadratic Bezier curve.
+// 4. Add a small delay per object for a wave/stagger effect.
+// 5. Keep scale at 100% for most of the flight, shrink only near the end.
+
+function startCollect(item, orderIndex) {
+  item.collectTime = 0;
+  item.collectDelay = orderIndex * settings.collectStagger;
+  item.collectStart = item.position.clone();
+  item.collectEnd = finish.position.clone().add(randomSmallOffset(settings.collectSpread));
+  item.collectControl = lerp(item.collectStart, item.collectEnd, 0.52);
+  item.collectControl.y += settings.collectArc;
+  item.endSize = randomRange(0.6, 0.8);
+}
+
+function updateCollect(item, deltaTime) {
+  item.collectTime += deltaTime * settings.collectSpeed;
+
+  const rawT = clamp01(item.collectTime - item.collectDelay);
+  const t = smoothstep(rawT);
+
+  item.position = quadraticBezier(
+    item.collectStart,
+    item.collectControl,
+    item.collectEnd,
+    t
+  );
+
+  item.rotation.x += deltaTime * 8;
+  item.rotation.y += deltaTime * 10;
+
+  if (t > 0.86) {
+    const endT = (t - 0.86) / 0.14;
+    item.scale = lerp(1.0, item.endSize, endT);
+  }
+
+  if (rawT >= 1) {
+    removeItem(item);
+  }
+}
+
+function smoothstep(t) {
+  return t * t * (3 - 2 * t);
+}
+
+function quadraticBezier(a, b, c, t) {
+  return lerp(lerp(a, b, t), lerp(b, c, t), t);
+}`,
+            instanced: `// Three.js InstancedMesh version.
+// One mesh draws all cubes. Each cube stores only state: position, rotation,
+// size, color and animation fields.
+
+const material = new THREE.MeshStandardMaterial({
+  color: 0xffd8a8,
+  roughness: 0.72,
+  metalness: 0.02
+});
+
+const cubes = new THREE.InstancedMesh(boxGeometry, material, maxCubes);
+cubes.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+
+function setCubeTransform(item) {
+  dummy.position.copy(item.position);
+  dummy.rotation.copy(item.rotation);
+  dummy.scale.setScalar(item.size);
+  dummy.updateMatrix();
+  cubes.setMatrixAt(item.index, dummy.matrix);
+  cubes.instanceMatrix.needsUpdate = true;
+}`,
+            json: `function exportState() {
+  return JSON.stringify({
+    version: 3,
+    preset: currentPreset,
+    config: { ...config }
+  }, null, 2);
+}
+
+function importState(json) {
+  const data = JSON.parse(json);
+  Object.assign(config, data.config);
+  syncControls();
+}`
+        };
+
+        const orbit = new OrbitControls(camera, renderer.domElement);
+        orbit.enableDamping = true;
+        orbit.target.set(0, 2, 0);
+
+        const els = {
+            cubeCount: document.getElementById('cubeCount'),
+            flyingCount: document.getElementById('flyingCount'),
+            readyCount: document.getElementById('readyCount'),
+            presetGrid: document.getElementById('presetGrid'),
+            generatorControls: document.getElementById('generatorControls'),
+            physicsControls: document.getElementById('physicsControls'),
+            collectControls: document.getElementById('collectControls'),
+            jsonText: document.getElementById('jsonText'),
+            jsonFile: document.getElementById('jsonFile'),
+            toast: document.getElementById('toast'),
+            codePanel: document.getElementById('codePanel'),
+            codeSelect: document.getElementById('codeSelect'),
+            codeOutput: document.getElementById('codeOutput'),
+            copyCodeBtn: document.getElementById('copyCodeBtn')
+        };
+
+        const controlDefs = [
+            ['generatorControls', 'spawnDuration', 'Длительность', 0.2, 12, 0.1],
+            ['generatorControls', 'spawnRate', 'Интервал', 0.01, 1, 0.01],
+            ['generatorControls', 'burstCount', 'Кубов за раз', 1, 30, 1],
+            ['generatorControls', 'maxCubes', 'Лимит кубов', 10, MAX_INSTANCE_CAPACITY, 10],
+            ['generatorControls', 'cohesion', 'Кучность', 0, 1, 0.01],
+            ['generatorControls', 'fieldRadius', 'Радиус Field', 1, 14, 0.1],
+            ['physicsControls', 'gravity', 'Гравитация', 5, 80, 0.5],
+            ['physicsControls', 'jumpPower', 'Сила вылета', 1, 36, 0.5],
+            ['physicsControls', 'throwPower', 'Дальность', 0, 24, 0.5],
+            ['physicsControls', 'bounciness', 'Отскок', 0, 1, 0.01],
+            ['physicsControls', 'friction', 'Трение', 0.8, 1, 0.001],
+            ['physicsControls', 'chaos', 'Хаос', 0, 1, 0.01],
+            ['collectControls', 'collectSpeed', 'Скорость', 0.4, 5, 0.05],
+            ['collectControls', 'collectArc', 'Высота дуги', 0, 14, 0.1],
+            ['collectControls', 'collectStagger', 'Очередь', 0, 0.14, 0.005],
+            ['collectControls', 'collectSpread', 'Разброс', 0, 5, 0.1]
+        ];
+
+        const inputByKey = new Map();
+
+        function showToast(message) {
+            els.toast.textContent = message;
+            els.toast.classList.add('visible');
+            clearTimeout(showToast.timer);
+            showToast.timer = setTimeout(() => els.toast.classList.remove('visible'), 1800);
+        }
+
+        function createButton(text, onClick) {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = text;
+            button.addEventListener('click', onClick);
+            return button;
+        }
+
+        function createControl(parent, key, label, min, max, step) {
+            const row = document.createElement('div');
+            row.className = 'control';
+            const title = document.createElement('label');
+            title.textContent = label;
+            const range = document.createElement('input');
+            range.type = 'range';
+            range.min = min;
+            range.max = max;
+            range.step = step;
+            const number = document.createElement('input');
+            number.type = 'number';
+            number.min = min;
+            number.max = max;
+            number.step = step;
+            row.append(title, range, number);
+            parent.append(row);
+            inputByKey.set(key, [range, number]);
+
+            const commit = value => {
+                const numeric = THREE.MathUtils.clamp(Number(value), min, max);
+                config[key] = step >= 1 ? Math.round(numeric) : numeric;
+                currentPreset = '';
+                if (key === 'maxCubes') enforceCubeLimit();
+                if (key === 'fieldRadius') updateField();
+                syncControls();
+            };
+
+            range.addEventListener('input', () => commit(range.value));
+            number.addEventListener('change', () => commit(number.value));
+        }
+
+        function buildUI() {
+            Object.entries(presets).forEach(([key, preset]) => {
+                els.presetGrid.append(createButton(preset.label, () => applyPreset(key)));
+            });
+            controlDefs.forEach(([group, key, label, min, max, step]) => createControl(els[group], key, label, min, max, step));
+            Object.keys(snippets).forEach(key => {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = {
+                    collect: 'Анимация collect',
+                    instanced: 'InstancedMesh',
+                    json: 'JSON'
+                }[key] || key;
+                els.codeSelect.append(option);
+            });
+        }
+
+        function syncControls() {
+            for (const [key, inputs] of inputByKey) inputs.forEach(input => input.value = config[key]);
+            document.querySelectorAll('#presetGrid button').forEach((button, index) => {
+                const key = Object.keys(presets)[index];
+                button.classList.toggle('active', key === currentPreset);
+            });
+            updateField();
+            updateStats();
+            els.jsonText.value = exportState();
+        }
+
+        function updateField() {
+            fieldParams.radius = config.fieldRadius;
+            fieldDisk.scale.set(fieldParams.radius, 1, fieldParams.radius);
+        }
+
+        function applyPreset(name) {
+            currentPreset = name;
+            const { label, ...values } = presets[name];
+            Object.assign(config, values);
+            enforceCubeLimit();
+            syncControls();
+            showToast(`${label}: применено`);
+        }
+
+        function activeLimit() {
+            return Math.min(config.maxCubes, MAX_INSTANCE_CAPACITY);
+        }
+
+        function enforceCubeLimit() {
+            while (woods.length > activeLimit()) removeWood(0);
+        }
+
+        function emit() {
+            isEmitting = true;
+            emissionTimer = 0;
+            lastSpawnTime = 0;
+        }
+
+        function sendToFinish() {
+            let order = 0;
+            woods.forEach(w => {
+                if (w.status !== 'landed') return;
+                w.status = 'collect';
+                w.collectTime = 0;
+                w.collectDelay = order * config.collectStagger;
+                w.collectStart.copy(w.position);
+                const side = new THREE.Vector3((Math.random() - 0.5) * config.collectSpread, 0, (Math.random() - 0.5) * config.collectSpread);
+                w.collectEnd.copy(finishCube.position).add(side);
+                w.collectEnd.y = finishCube.position.y;
+                w.collectControl.copy(w.collectStart).lerp(w.collectEnd, 0.52);
+                w.collectControl.y += config.collectArc + Math.random() * config.collectArc * 0.35;
+                w.endSize = 0.6 + Math.random() * 0.2;
+                order++;
+            });
+        }
+
+        function clearWoods() {
+            woods.length = 0;
+            woodMesh.count = 0;
+            woodMesh.instanceMatrix.needsUpdate = true;
+            updateStats();
+        }
+
+        function spawnWoodBurst() {
+            for (let i = 0; i < config.burstCount; i++) {
+                if (woods.length >= activeLimit()) removeWood(0);
+                spawnWood();
+            }
+            updateStats();
+        }
+
+        function spawnWood() {
+            const looseRadius = THREE.MathUtils.lerp(fieldParams.radius * 2.2, fieldParams.radius * 0.28, config.cohesion);
+            const angle = Math.random() * Math.PI * 2;
+            const radius = Math.sqrt(Math.random()) * looseRadius;
+            const target = new THREE.Vector3(
+                fieldDisk.position.x + Math.cos(angle) * radius,
+                0,
+                fieldDisk.position.z + Math.sin(angle) * radius
+            );
+
+            const position = startCube.position.clone();
+            const dir = new THREE.Vector3().subVectors(target, startCube.position);
+            dir.y = 0;
+            dir.normalize();
+
+            const velocity = new THREE.Vector3(
+                dir.x * config.throwPower + (Math.random() - 0.5) * config.chaos * 25,
+                config.jumpPower * (0.82 + Math.random() * 0.36),
+                dir.z * config.throwPower + (Math.random() - 0.5) * config.chaos * 25
+            );
+
+            const w = {
+                index: woods.length,
+                position,
+                rotation: new THREE.Euler(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI),
+                velocity,
+                size: 1,
+                status: 'flying',
+                rotSpeed: new THREE.Vector3(Math.random() * 0.18, Math.random() * 0.18, Math.random() * 0.18),
+                collectTime: 0,
+                collectDelay: 0,
+                collectStart: new THREE.Vector3(),
+                collectControl: new THREE.Vector3(),
+                collectEnd: new THREE.Vector3(),
+                endSize: 0.7
+            };
+
+            woods.push(w);
+            woodMesh.count = woods.length;
+            updateInstance(w);
+        }
+
+        function removeWood(index) {
+            const lastIndex = woods.length - 1;
+            if (index < 0 || index > lastIndex) return;
+            if (index !== lastIndex) {
+                const moved = woods[lastIndex];
+                woods[index] = moved;
+                moved.index = index;
+                updateInstance(moved);
+            }
+            woods.pop();
+            woodMesh.count = woods.length;
+            woodMesh.setMatrixAt(lastIndex, hiddenMatrix);
+            woodMesh.instanceMatrix.needsUpdate = true;
+        }
+
+        function updateInstance(w) {
+            dummy.position.copy(w.position);
+            dummy.rotation.copy(w.rotation);
+            dummy.scale.setScalar(Math.max(0.001, w.size));
+            dummy.updateMatrix();
+            woodMesh.setMatrixAt(w.index, dummy.matrix);
+            woodMesh.instanceMatrix.needsUpdate = true;
+        }
+
+        function updateFlying(w, dt) {
+            w.velocity.y -= config.gravity * dt;
+            w.position.addScaledVector(w.velocity, dt);
+            w.rotation.x += w.rotSpeed.x;
+            w.rotation.y += w.rotSpeed.y;
+            w.rotation.z += w.rotSpeed.z;
+
+            const floorY = 0.5;
+            if (w.position.y <= floorY) {
+                w.position.y = floorY;
+                if (Math.abs(w.velocity.y) > 1.4) {
+                    w.velocity.y *= -config.bounciness;
+                    w.velocity.x *= config.friction;
+                    w.velocity.z *= config.friction;
+                } else {
+                    w.status = 'landed';
+                }
+            }
+        }
+
+        function smoothstep(t) {
+            return t * t * (3 - 2 * t);
+        }
+
+        function bezier(a, b, c, t) {
+            const ab = a.clone().lerp(b, t);
+            const bc = b.clone().lerp(c, t);
+            return ab.lerp(bc, t);
+        }
+
+        function updateCollect(w, dt) {
+            w.collectTime += dt * config.collectSpeed;
+            const rawT = Math.min(1, Math.max(0, w.collectTime - w.collectDelay));
+            const t = smoothstep(rawT);
+            w.position.copy(bezier(w.collectStart, w.collectControl, w.collectEnd, t));
+            w.rotation.x += dt * 8;
+            w.rotation.y += dt * 10;
+            w.rotation.z += dt * 5;
+            if (t > 0.86) w.size = THREE.MathUtils.lerp(1, w.endSize, (t - 0.86) / 0.14);
+            if (rawT >= 1) removeWood(w.index);
+        }
+
+        function updateStats() {
+            let flying = 0;
+            let ready = 0;
+            woods.forEach(w => {
+                if (w.status === 'flying') flying++;
+                if (w.status === 'landed') ready++;
+            });
+            els.cubeCount.textContent = `${woods.length} / ${activeLimit()}`;
+            els.flyingCount.textContent = flying;
+            els.readyCount.textContent = ready;
+        }
+
+        function exportState() {
+            return JSON.stringify({ version: 3, preset: currentPreset || 'custom', config: { ...config } }, null, 2);
+        }
+
+        function importState(json) {
+            const data = JSON.parse(json);
+            if (data.config) Object.assign(config, data.config);
+            currentPreset = data.preset && presets[data.preset] ? data.preset : '';
+            enforceCubeLimit();
+            syncControls();
+            showToast('JSON применен');
+        }
+
+        function downloadJson() {
+            const blob = new Blob([exportState()], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = '3d-playground-settings.json';
+            link.click();
+            URL.revokeObjectURL(link.href);
+        }
+
+        function updateCodePanel() {
+            els.codeOutput.textContent = snippets[els.codeSelect.value] || '';
+        }
+
+        async function copyCodeSnippet() {
+            const code = els.codeOutput.textContent;
+            try {
+                await navigator.clipboard.writeText(code);
+                showToast('Код скопирован');
+            } catch {
+                showToast('Код можно выделить вручную');
+            }
+        }
+
+        document.getElementById('emitBtn').addEventListener('click', emit);
+        document.getElementById('finishBtn').addEventListener('click', sendToFinish);
+        document.getElementById('clearBtn').addEventListener('click', clearWoods);
+        document.getElementById('copyJsonBtn').addEventListener('click', async () => {
+            const json = exportState();
+            els.jsonText.value = json;
+            try {
+                await navigator.clipboard.writeText(json);
+                showToast('JSON скопирован');
+            } catch {
+                els.jsonText.select();
+                showToast('JSON готов к копированию');
+            }
+        });
+        document.getElementById('downloadJsonBtn').addEventListener('click', downloadJson);
+        document.getElementById('applyJsonBtn').addEventListener('click', () => importState(els.jsonText.value));
+        els.jsonFile.addEventListener('change', async event => {
+            const file = event.target.files[0];
+            if (!file) return;
+            els.jsonText.value = await file.text();
+            importState(els.jsonText.value);
+            event.target.value = '';
+        });
+        document.getElementById('toggleCode').addEventListener('click', () => {
+            els.codePanel.classList.toggle('visible');
+            updateCodePanel();
+        });
+        els.copyCodeBtn.addEventListener('click', copyCodeSnippet);
+        document.getElementById('closeCode').addEventListener('click', () => els.codePanel.classList.remove('visible'));
+        els.codeSelect.addEventListener('change', updateCodePanel);
+
+        buildUI();
+        syncControls();
+        updateCodePanel();
+
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const dt = Math.min(clock.getDelta(), 0.033);
+            const now = clock.getElapsedTime();
+
+            if (isEmitting) {
+                emissionTimer += dt;
+                if (now - lastSpawnTime > config.spawnRate) {
+                    spawnWoodBurst();
+                    lastSpawnTime = now;
+                }
+                if (emissionTimer >= config.spawnDuration) isEmitting = false;
+            }
+
+            for (let i = woods.length - 1; i >= 0; i--) {
+                const w = woods[i];
+                if (w.status === 'flying') updateFlying(w, dt);
+                if (w.status === 'collect') updateCollect(w, dt);
+                if (woods[i] === w) updateInstance(w);
+            }
+
+            statsTimer += dt;
+            if (statsTimer > 0.12) {
+                updateStats();
+                statsTimer = 0;
+            }
+
+            orbit.update();
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+    </script>
+</body>
+</html>
