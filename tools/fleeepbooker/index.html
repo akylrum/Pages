@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fleeepbooker</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    max-width: 1400px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 20px;
+    align-items: flex-end;
+}
+
+label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+input[type="number"] {
+    width: 120px;
+}
+
+button {
+    padding: 10px 16px;
+    cursor: pointer;
+}
+
+#info {
+    margin: 15px 0;
+    font-weight: bold;
+}
+
+#previewCanvas {
+    border: 1px solid #666;
+    max-width: 100%;
+    height: auto;
+    image-rendering: pixelated;
+}
+
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkbox-row label {
+    flex-direction: row;
+    align-items: center;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+    align-items: flex-start;
+}
+
+.row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+</style>
+</head>
+<body>
+
+<h1>Fl<i>eee</i>pbooker</h1>
+The <i>simpliest</i> spritesheet creating tool.<br>
+<br>
+<div class="controls">
+    <div class="row">
+        <label>
+            PNG files
+            <input
+                type="file"
+                id="files"
+                multiple
+                accept=".png">
+        </label>
+    </div>
+    <div class="row">
+        <label>
+            Columns
+            <input
+                type="number"
+                id="columns"
+                value="8"
+                min="1">
+        </label>
+
+        <label>
+            Frame Width
+            <input
+                type="number"
+                id="frameWidth"
+                value="256"
+                min="1">
+        </label>
+
+        <label>
+            Frame Height
+            <input
+                type="number"
+                id="frameHeight"
+                value="256"
+                min="1">
+        </label>
+    </div>
+
+    <div class="checkbox-row">
+        <label>
+            <input
+                type="checkbox"
+                id="darkPreview">
+            Dark Preview
+        </label>
+    </div>
+
+</div>
+
+<button id="buildBtn">
+    Build Spritesheet
+</button>
+
+<button
+    id="downloadBtn"
+    disabled>
+    Download PNG
+</button>
+
+<div id="info"></div>
+
+<canvas id="previewCanvas"></canvas>
+
+<!-- Скрытый холст для экспорта -->
+<canvas
+    id="exportCanvas"
+    style="display:none">
+</canvas>
+
+<script>
+
+const buildBtn =
+    document.getElementById('buildBtn');
+
+const downloadBtn =
+    document.getElementById('downloadBtn');
+
+const exportCanvas =
+    document.getElementById('exportCanvas');
+
+const exportCtx =
+    exportCanvas.getContext('2d');
+
+const previewCanvas =
+    document.getElementById('previewCanvas');
+
+const previewCtx =
+    previewCanvas.getContext('2d');
+
+let lastBlob = null;
+
+function loadImage(file) {
+
+    return new Promise((resolve, reject) => {
+
+        const img = new Image();
+
+        img.onload = () => {
+
+            URL.revokeObjectURL(img.src);
+            resolve(img);
+        };
+
+        img.onerror = reject;
+
+        img.src =
+            URL.createObjectURL(file);
+    });
+}
+
+function redrawPreview(
+    frameWidth,
+    frameHeight
+) {
+
+    previewCanvas.width =
+        exportCanvas.width;
+
+    previewCanvas.height =
+        exportCanvas.height;
+
+    const dark =
+        document.getElementById(
+            'darkPreview'
+        ).checked;
+
+    previewCtx.clearRect(
+        0,
+        0,
+        previewCanvas.width,
+        previewCanvas.height
+    );
+
+    previewCtx.fillStyle =
+        dark
+            ? '#000000'
+            : '#808080';
+
+    previewCtx.fillRect(
+        0,
+        0,
+        previewCanvas.width,
+        previewCanvas.height
+    );
+
+    previewCtx.drawImage(
+        exportCanvas,
+        0,
+        0
+    );
+
+    previewCtx.strokeStyle =
+        dark
+            ? 'rgba(255,255,255,0.35)'
+            : 'rgba(0,0,0,0.35)';
+
+    previewCtx.lineWidth = 1;
+
+    for (
+        let x = 0;
+        x <= previewCanvas.width;
+        x += frameWidth
+    ) {
+        previewCtx.beginPath();
+        previewCtx.moveTo(x, 0);
+        previewCtx.lineTo(
+            x,
+            previewCanvas.height
+        );
+        previewCtx.stroke();
+    }
+
+    for (
+        let y = 0;
+        y <= previewCanvas.height;
+        y += frameHeight
+    ) {
+        previewCtx.beginPath();
+        previewCtx.moveTo(0, y);
+        previewCtx.lineTo(
+            previewCanvas.width,
+            y
+        );
+        previewCtx.stroke();
+    }
+}
+
+buildBtn.addEventListener(
+    'click',
+    async () => {
+
+        const files =
+            [...document
+                .getElementById('files')
+                .files];
+
+        if (!files.length) {
+
+            alert(
+                'Choose at least one PNG file.'
+            );
+
+            return;
+        }
+
+        files.sort(
+            (a, b) =>
+                a.name.localeCompare(
+                    b.name,
+                    undefined,
+                    {
+                        numeric: true
+                    }
+                )
+        );
+
+        const columns =
+            parseInt(
+                document
+                    .getElementById(
+                        'columns'
+                    ).value
+            );
+
+        const frameWidth =
+            parseInt(
+                document
+                    .getElementById(
+                        'frameWidth'
+                    ).value
+            );
+
+        const frameHeight =
+            parseInt(
+                document
+                    .getElementById(
+                        'frameHeight'
+                    ).value
+            );
+
+        const rows =
+            Math.ceil(
+                files.length /
+                columns
+            );
+
+        exportCanvas.width =
+            columns *
+            frameWidth;
+
+        exportCanvas.height =
+            rows *
+            frameHeight;
+
+        exportCtx.clearRect(
+            0,
+            0,
+            exportCanvas.width,
+            exportCanvas.height
+        );
+
+        const images =
+            await Promise.all(
+                files.map(loadImage)
+            );
+
+        images.forEach(
+            (img, index) => {
+
+                const col =
+                    index %
+                    columns;
+
+                const row =
+                    Math.floor(
+                        index /
+                        columns
+                    );
+
+                const x =
+                    col *
+                    frameWidth;
+
+                const y =
+                    row *
+                    frameHeight;
+
+                exportCtx.drawImage(
+                    img,
+                    0,
+                    0,
+                    img.width,
+                    img.height,
+                    x,
+                    y,
+                    frameWidth,
+                    frameHeight
+                );
+            }
+        );
+
+        redrawPreview(
+            frameWidth,
+            frameHeight
+        );
+
+        exportCanvas.toBlob(
+            blob => {
+
+                lastBlob = blob;
+
+                downloadBtn.disabled =
+                    false;
+            },
+            'image/png'
+        );
+
+        document
+            .getElementById('info')
+            .textContent =
+            `Кадров: ${files.length} | Сетка: ${columns}×${rows} | Атлас: ${exportCanvas.width}×${exportCanvas.height}`;
+    }
+);
+
+downloadBtn.addEventListener(
+    'click',
+    () => {
+
+        if (!lastBlob) {
+            return;
+        }
+
+        const a =
+            document.createElement('a');
+
+        a.href =
+            URL.createObjectURL(
+                lastBlob
+            );
+
+        a.download =
+            'flipbook.png';
+
+        a.click();
+    }
+);
+
+document
+    .getElementById(
+        'darkPreview'
+    )
+    .addEventListener(
+        'change',
+        () => {
+
+            const frameWidth =
+                parseInt(
+                    document
+                        .getElementById(
+                            'frameWidth'
+                        ).value
+                );
+
+            const frameHeight =
+                parseInt(
+                    document
+                        .getElementById(
+                            'frameHeight'
+                        ).value
+                );
+
+            redrawPreview(
+                frameWidth,
+                frameHeight
+            );
+        }
+    );
+
+</script>
+
+</body>
+</html>
