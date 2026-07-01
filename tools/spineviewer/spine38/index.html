@@ -148,6 +148,7 @@ canvas {
 <script>
 console.log(window.spine);
 // js
+console.log("SCRIPT START");
 
 let spineApp = null;
 
@@ -165,6 +166,9 @@ const fileInput = document.getElementById("fileInput");
 const openBtn = document.getElementById("openBtn");
 
 // open files
+
+console.log("BTN:", document.getElementById("btn"));
+console.log("DROP:", document.getElementById("drop"));
 
 openBtn.onclick = () => fileInput.click();
 
