@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Spine 3.8 Viewer</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    font-family: Arial, sans-serif;
+    color: #000;
+}
+
+#app {
+    width: 800px;
+    height: 620px;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+}
+
+#topbar {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ccc;
+    padding: 0 10px;
+    font-size: 14px;
+}
+
+#openBtn {
+    border: 1px solid #000;
+    background: #fff;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+#main {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+#left {
+    width: 220px;
+    border-right: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+}
+
+.section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.section-title {
+    padding: 6px 8px;
+    border-bottom: 1px solid #ccc;
+    font-size: 12px;
+    background: #f8f8f8;
+}
+
+.list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.item {
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+.item:hover {
+    background: #eee;
+}
+
+.item.active {
+    background: #ddd;
+}
+
+#right {
+    flex: 1;
+    position: relative;
+    background: #fff;
+}
+
+#drop {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 14px;
+    pointer-events: none;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+    <div id="topbar">
+        <button id="openBtn">Open Files</button>
+        <div>Spine 3.8 Viewer</div>
+    </div>
+
+    <div id="main">
+
+        <div id="left">
+
+            <div class="section">
+                <div class="section-title">Animations</div>
+                <div class="list" id="animList"></div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Skins</div>
+                <div class="list" id="skinList"></div>
+            </div>
+
+        </div>
+
+        <div id="right">
+            <canvas id="canvas"></canvas>
+            <div id="drop">Drop Spine files here</div>
+        </div>
+
+    </div>
+
+</div>
+
+<input type="file" id="fileInput" multiple style="display:none" />
+
+<script src="runtime/spine-webgl.js"></script>
+<script>
+console.log(window.spine);
+// js
+
+let spineApp = null;
+
+let objectURLs = [];
+
+let files = {};
+let baseName = null;
+
+const canvas = document.getElementById("canvas");
+const animList = document.getElementById("animList");
+const skinList = document.getElementById("skinList");
+
+const drop = document.getElementById("drop");
+const fileInput = document.getElementById("fileInput");
+const openBtn = document.getElementById("openBtn");
+
+// open files
+
+openBtn.onclick = () => fileInput.click();
+
+fileInput.onchange = (e) => {
+    handleFiles(e.target.files);
+};
+
+// drag and drop
+
+window.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    drop.style.display = "flex";
+});
+
+window.addEventListener("dragleave", (e) => {
+    e.preventDefault();
+});
+
+window.addEventListener("drop", (e) => {
+    e.preventDefault();
+    drop.style.display = "none";
+    handleFiles(e.dataTransfer.files);
+});
+
+
+// spine-webgl 
+
+let gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+
+let renderer;
+let skeleton;
+let animationState;
+let skeletonData;
+let atlas;
+let assetManager;
+
+
+// UTILS
+
+
+function clearURLs() {
+    objectURLs.forEach(url => URL.revokeObjectURL(url));
+    objectURLs = [];
+}
+
+function getBounds(skeleton) {
+    skeleton.updateWorldTransform();
+
+    let offset = { x: 0, y: 0 };
+    let size = { x: 0, y: 0 };
+
+    let minX = 999999;
+    let minY = 999999;
+    let maxX = -999999;
+    let maxY = -999999;
+
+    skeleton.slots.forEach(slot => {
+        const attachment = slot.getAttachment();
+        if (!attachment) return;
+
+        const vertices = [];
+
+        if (attachment.computeWorldVertices) {
+            attachment.computeWorldVertices(slot, 0, attachment.worldVerticesLength, vertices, 0, 2);
+        }
+
+        for (let i = 0; i < vertices.length; i += 2) {
+            const x = vertices[i];
+            const y = vertices[i + 1];
+
+            minX = Math.min(minX, x);
+            minY = Math.min(minY, y);
+            maxX = Math.max(maxX, x);
+            maxY = Math.max(maxY, y);
+        }
+    });
+
+    offset.x = minX;
+    offset.y = minY;
+    size.x = maxX - minX;
+    size.y = maxY - minY;
+
+    return { offset, size };
+}
+
+function fitSkeleton() {
+    if (!skeleton) return;
+
+    skeleton.setToSetupPose();
+    skeleton.updateWorldTransform();
+
+    const bounds = getBounds(skeleton);
+
+    const centerX = (bounds.offset.x + bounds.size.x / 2);
+    const centerY = (bounds.offset.y + bounds.size.y / 2);
+
+    skeleton.x = -centerX;
+    skeleton.y = -centerY;
+
+    const scaleX = canvas.width / bounds.size.x;
+    const scaleY = canvas.height / bounds.size.y;
+
+    const scale = Math.min(scaleX, scaleY) * 0.8;
+
+    skeleton.scaleX = scale;
+    skeleton.scaleY = scale;
+}
+
+function hideDrop() {
+    drop.style.display = "none";
+}
+
+
+//  CORE PIPELINE
+
+function handleFiles(fileList) {
+
+    // 🔥 очистка предыдущего состояния
+    dispose?.();
+    clearURLs?.();
+
+    files = {};
+    baseName = null;
+
+    // 🔥 группировка файлов по имени
+    for (let file of fileList) {
+
+        const name = file.name;
+        const ext = name.split(".").pop().toLowerCase();
+        const key = name.replace("." + ext, "");
+
+        // сохраняем URL для очистки памяти
+        const url = URL.createObjectURL(file);
+        objectURLs.push(url);
+
+        if (!files[key]) files[key] = {};
+
+        files[key][ext] = {
+            file,
+            url
+        };
+
+        if (!baseName || key.length < baseName.length) {
+            baseName = key;
+        }
+    }
+
+    // 🔥 UI: скрыть drop текст
+    drop.style.display = "none";
+
+    // 🔥 проверка минимального набора Spine файлов
+    const entry = files[baseName];
+
+    if (!entry) {
+        showDropText("No valid Spine files");
+        return;
+    }
+
+    const hasAtlas = !!entry.atlas;
+    const hasJson = !!entry.json;
+    const hasSkel = !!entry.skel;
+
+    if (!hasAtlas || (!hasJson && !hasSkel)) {
+        showDropText("Missing .atlas or skeleton (.json/.skel)");
+        return;
+    }
+
+    // 🔥 загрузка atlas
+    const reader = new FileReader();
+
+    reader.onload = function () {
+
+        const atlasText = reader.result;
+
+        createSpine(
+            atlasText,
+            entry.json?.file || null,
+            entry.skel?.file || null
+        );
+    };
+
+    reader.readAsText(entry.atlas.file);
+}
+
+function createSpine(atlasText, jsonFile, skelFile) {
+
+    // =========================
+    // 1. CLEAN PREVIOUS SCENE
+    // =========================
+    dispose();
+    clearURLs();
+
+    drop.style.display = "none";
+
+    // =========================
+    // 2. CREATE ASSET LOADER
+    // =========================
+    const loader = new spine.AssetManager(null, "runtime/");
+
+    const atlasBlob = new Blob([atlasText], { type: "text/plain" });
+    const atlasURL = URL.createObjectURL(atlasBlob);
+    objectURLs.push(atlasURL);
+
+    loader.loadText("atlas", atlasURL);
+
+    // skeleton (json or skel)
+    let skeletonURL = null;
+
+    if (jsonFile) {
+        skeletonURL = URL.createObjectURL(jsonFile);
+        loader.loadText("skeleton", skeletonURL);
+        objectURLs.push(skeletonURL);
+    }
+
+    if (skelFile) {
+        skeletonURL = URL.createObjectURL(skelFile);
+        loader.loadBinary("skeleton", skeletonURL);
+        objectURLs.push(skeletonURL);
+    }
+
+    // =========================
+    // 3. WAIT FOR LOAD
+    // =========================
+    waitForAssets(loader);
+}
+
+function waitForAssets(loader) {
+
+    function check() {
+        if (!loader.isLoadingComplete()) {
+            requestAnimationFrame(check);
+            return;
+        }
+
+        initSpine(loader);
+        
+    }
+
+    check();
+}
+
+function initSpine(loader) {
+
+    const atlasText = loader.get("atlas");
+
+    const textureLoader = new spine.TextureAtlas(atlasText, (path) => {
+        return loader.get(path);
+    });
+
+    const atlasAttachmentLoader = new spine.AtlasAttachmentLoader(textureLoader);
+
+    let skeletonData;
+
+    const skelData = loader.get("skeleton");
+
+    // JSON or binary detection
+    if (skelData instanceof ArrayBuffer || skelData.byteLength) {
+        const skeletonBinary = new spine.SkeletonBinary(atlasAttachmentLoader);
+        skeletonData = skeletonBinary.readSkeletonData(skelData);
+    } else {
+        const skeletonJson = new spine.SkeletonJson(atlasAttachmentLoader);
+        skeletonData = skeletonJson.readSkeletonData(JSON.parse(skelData));
+    }
+
+    skeleton = new spine.Skeleton(skeletonData);
+    skeleton.setToSetupPose();
+
+    animationState = new spine.AnimationState(
+        new spine.AnimationStateData(skeletonData)
+    );
+
+    setupUI(skeletonData);
+
+    fitSkeleton();        // 👈 авто-центрирование
+    startRender();        // 👈 запуск WebGL
+}
+console.log(window.spine);
+
+// UI
+
+function setupUI(data) {
+
+    animList.innerHTML = "";
+    skinList.innerHTML = "";
+
+    // Animations
+    data.animations.forEach((anim) => {
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerText = anim.name;
+
+        div.onclick = () => {
+            animationState.setAnimation(0, anim.name, true);
+
+            document.querySelectorAll("#animList .item")
+                .forEach(i => i.classList.remove("active"));
+
+            div.classList.add("active");
+        };
+
+        animList.appendChild(div);
+    });
+
+    // Skins
+    if (data.skins.length === 0) {
+        const div = document.createElement("div");
+        div.innerText = "--";
+        div.className = "item";
+        skinList.appendChild(div);
+    } else {
+        data.skins.forEach((skin) => {
+            const div = document.createElement("div");
+            div.className = "item";
+            div.innerText = skin.name;
+
+            div.onclick = () => {
+                skeleton.setSkinByName(skin.name);
+                skeleton.setSlotsToSetupPose();
+            };
+
+            skinList.appendChild(div);
+        });
+    }
+
+    // autoplay first animation
+    if (data.animations.length > 0) {
+        animationState.setAnimation(0, data.animations[0].name, true);
+
+        const first = animList.querySelector(".item");
+        if (first) first.classList.add("active");
+    }
+}
+
+// RENDERING
+
+function startRender() {
+
+    renderer = new spine.SceneRenderer(canvas, gl);
+
+    function render() {
+
+        gl.clearColor(1, 1, 1, 1);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        animationState.update(1 / 60);
+        animationState.apply(skeleton);
+
+        skeleton.updateWorldTransform();
+
+        renderer.begin();
+        renderer.drawSkeleton(skeleton);
+        renderer.end();
+
+        spineApp = requestAnimationFrame(render);
+    }
+
+    render();
+}

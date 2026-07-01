@@ -372,16 +372,30 @@ buildBtn.addEventListener(
                     row *
                     frameHeight;
 
+                const scale =
+                     Math.min(
+                    frameWidth / img.width,
+                    frameHeight / img.height
+                    );
+
+                const drawWidth =
+                    img.width * scale;
+
+                const drawHeight =
+                    img.height * scale;
+
+                const offsetX =
+                    x + (frameWidth - drawWidth) / 2;
+
+                const offsetY =
+                    y + (frameHeight - drawHeight) / 2;
+
                 exportCtx.drawImage(
                     img,
-                    0,
-                    0,
-                    img.width,
-                    img.height,
-                    x,
-                    y,
-                    frameWidth,
-                    frameHeight
+                    offsetX,
+                    offsetY,
+                    drawWidth,
+                    drawHeight
                 );
             }
         );
